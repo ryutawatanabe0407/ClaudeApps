@@ -22,7 +22,7 @@ GitHub Pagesでデプロイされたアプリを確認できます。
 - HTML5
 - CSS3 (Animations, Grid, Flexbox)
 - Vanilla JavaScript
-- GitHub Actions (自動デプロイ)
+- GitHub Pages
 
 ### ローカルでの実行
 
@@ -36,9 +36,9 @@ open index.html
 
 ### デプロイ
 
-mainブランチまたは claude/github-pages-deployment-80rVt、claude/github-pages-workflow-Hjr81 ブランチにプッシュすると、GitHub Actionsが自動的にGitHub Pagesにデプロイします。
+GitHub Pages で直接公開しています。mainブランチにプッシュすると自動的にデプロイされます。
 
-🌐 デプロイ先: https://ryutawatanabe0407.github.io/ClaudeApps/
+🌐 公開URL: https://ryutawatanabe0407.github.io/ClaudeApps/
 
 ### ライセンス
 
