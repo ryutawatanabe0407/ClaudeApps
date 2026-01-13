@@ -36,7 +36,9 @@ open index.html
 
 ### デプロイ
 
-mainブランチまたは claude/github-pages-deployment-80rVt ブランチにプッシュすると、GitHub Actionsが自動的にGitHub Pagesにデプロイします。
+mainブランチまたは claude/github-pages-deployment-80rVt、claude/github-pages-workflow-Hjr81 ブランチにプッシュすると、GitHub Actionsが自動的にGitHub Pagesにデプロイします。
+
+🌐 デプロイ先: https://ryutawatanabe0407.github.io/ClaudeApps/
 
 ### ライセンス
 
