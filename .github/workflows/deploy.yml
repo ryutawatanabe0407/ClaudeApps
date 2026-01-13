@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - claude/github-pages-deployment-80rVt
+      - claude/github-pages-workflow-Hjr81
   workflow_dispatch:
 
 permissions:
