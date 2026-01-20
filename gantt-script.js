@@ -222,7 +222,7 @@ class GanttChart {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        let html = '<div class="gantt-grid">';
+        let html = `<div class="gantt-grid" style="--gantt-units: ${timeHeaders.length};">`;
 
         // ヘッダー
         html += '<div class="gantt-header">';

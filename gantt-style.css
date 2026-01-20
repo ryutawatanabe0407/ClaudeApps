@@ -413,6 +413,8 @@ main {
     padding: 24px;
     overflow-x: auto;
     min-height: 300px;
+    --gantt-unit-width: 80px;
+    --gantt-units: 1;
 }
 
 .gantt-empty {
@@ -446,13 +448,13 @@ main {
 
 .gantt-timeline-header {
     display: flex;
-    overflow-x: auto;
     border-bottom: 1px solid #E8E5E1;
+    min-width: calc(var(--gantt-units) * var(--gantt-unit-width));
 }
 
 .gantt-time-cell {
     flex: 1;
-    min-width: 80px;
+    min-width: var(--gantt-unit-width);
     padding: 6px;
     text-align: center;
     font-size: 0.75rem;
@@ -491,6 +493,7 @@ main {
     height: 36px;
     background: #FAFAF9;
     border-radius: 0;
+    min-width: calc(var(--gantt-units) * var(--gantt-unit-width));
 }
 
 .gantt-bar {
