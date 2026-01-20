@@ -71,10 +71,17 @@ class GanttChart {
         });
 
         // 時間軸セレクト
-        document.getElementById('timeScale').addEventListener('change', (e) => {
-            this.timeScale = e.target.value;
-            this.renderGanttChart();
-        });
+        const timeScaleSelect = document.getElementById('timeScale');
+        if (timeScaleSelect) {
+            console.log('時間軸セレクトが見つかりました');
+            timeScaleSelect.addEventListener('change', (e) => {
+                console.log('時間軸変更:', e.target.value);
+                this.timeScale = e.target.value;
+                this.renderGanttChart();
+            });
+        } else {
+            console.error('時間軸セレクトが見つかりません');
+        }
     }
 
     showTaskForm(task = null) {
@@ -371,15 +378,19 @@ class GanttChart {
     }
 
     exportTasks() {
+        console.log('exportTasks呼び出し');
         if (this.tasks.length === 0) {
             alert('エクスポートするタスクがありません');
             return;
         }
 
+        console.log('exportToExcel呼び出し');
         this.exportToExcel();
     }
 
     exportToExcel() {
+        console.log('exportToExcel実行開始');
+        console.log('XLSX:', typeof XLSX);
         const { minDate, maxDate } = this.getDateRange();
 
         // 日付の配列を生成
