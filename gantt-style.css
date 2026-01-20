@@ -5,36 +5,39 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+    background: #F5F3F0;
     min-height: 100vh;
-    padding: 20px;
+    padding: 24px;
 }
 
 .container {
     max-width: 1400px;
     margin: 0 auto;
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    background: #FFFFFF;
+    border-radius: 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     overflow: hidden;
 }
 
 header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 40px;
-    text-align: center;
+    background: #FFFFFF;
+    color: #333333;
+    padding: 32px 40px;
+    border-bottom: 1px solid #E8E5E1;
 }
 
 header h1 {
-    font-size: 2.5rem;
-    margin-bottom: 10px;
+    font-size: 1.75rem;
+    font-weight: 400;
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
 }
 
 header p {
-    font-size: 1.1rem;
-    opacity: 0.9;
+    font-size: 0.875rem;
+    color: #6B6B6B;
+    font-weight: 300;
 }
 
 main {
@@ -43,66 +46,74 @@ main {
 
 .controls {
     display: flex;
-    gap: 10px;
-    margin-bottom: 30px;
+    gap: 8px;
+    margin-bottom: 32px;
     flex-wrap: wrap;
 }
 
 .btn {
-    padding: 12px 24px;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
+    padding: 10px 20px;
+    border: 1px solid #D4D1CC;
+    border-radius: 2px;
+    font-size: 0.875rem;
     cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 600;
+    transition: all 0.2s ease;
+    font-weight: 400;
+    background: #FFFFFF;
+    color: #333333;
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background: #333333;
+    color: #FFFFFF;
+    border-color: #333333;
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    background: #4D4D4D;
+    border-color: #4D4D4D;
 }
 
 .btn-secondary {
-    background: #f0f0f0;
-    color: #333;
+    background: #FFFFFF;
+    color: #333333;
+    border-color: #D4D1CC;
 }
 
 .btn-secondary:hover {
-    background: #e0e0e0;
+    background: #F5F3F0;
+    border-color: #B8B5B0;
 }
 
 .btn-icon {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 6px;
-    background: #f0f0f0;
+    padding: 8px 14px;
+    border: 1px solid #D4D1CC;
+    border-radius: 2px;
+    background: #FFFFFF;
     cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
+    font-size: 0.8125rem;
+    transition: all 0.2s ease;
+    color: #333333;
 }
 
 .btn-icon:hover {
-    background: #e0e0e0;
+    background: #F5F3F0;
+    border-color: #B8B5B0;
 }
 
 .task-form {
-    background: #f8f9fa;
-    padding: 30px;
-    border-radius: 12px;
-    margin-bottom: 30px;
+    background: #FAFAF9;
+    padding: 32px;
+    border-radius: 0;
+    margin-bottom: 32px;
+    border: 1px solid #E8E5E1;
     animation: slideDown 0.3s ease;
 }
 
 @keyframes slideDown {
     from {
         opacity: 0;
-        transform: translateY(-20px);
+        transform: translateY(-10px);
     }
     to {
         opacity: 1;
@@ -111,66 +122,70 @@ main {
 }
 
 .task-form h3 {
-    margin-bottom: 20px;
-    color: #333;
+    margin-bottom: 24px;
+    color: #333333;
+    font-size: 1.125rem;
+    font-weight: 400;
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 }
 
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: 16px;
 }
 
 .form-group label {
     display: block;
     margin-bottom: 8px;
-    color: #555;
-    font-weight: 600;
+    color: #333333;
+    font-weight: 400;
+    font-size: 0.875rem;
 }
 
 .form-group input[type="text"],
 .form-group input[type="date"] {
     width: 100%;
-    padding: 12px;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
+    padding: 10px 12px;
+    border: 1px solid #D4D1CC;
+    border-radius: 2px;
+    font-size: 0.9375rem;
+    transition: border-color 0.2s ease;
+    background: #FFFFFF;
 }
 
 .form-group input[type="text"]:focus,
 .form-group input[type="date"]:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #999999;
 }
 
 .form-group input[type="range"] {
     width: 100%;
-    height: 8px;
-    border-radius: 4px;
-    background: #e0e0e0;
+    height: 2px;
+    border-radius: 0;
+    background: #E8E5E1;
     outline: none;
 }
 
 .form-group input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
-    background: #667eea;
+    background: #333333;
     cursor: pointer;
 }
 
 .form-group input[type="range"]::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
-    background: #667eea;
+    background: #333333;
     cursor: pointer;
     border: none;
 }
@@ -178,46 +193,48 @@ main {
 .form-group input[type="color"] {
     width: 100px;
     height: 40px;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
+    border: 1px solid #D4D1CC;
+    border-radius: 2px;
     cursor: pointer;
 }
 
 .form-actions {
     display: flex;
-    gap: 10px;
-    margin-top: 20px;
+    gap: 8px;
+    margin-top: 24px;
 }
 
 .task-list {
-    margin-bottom: 30px;
+    margin-bottom: 40px;
 }
 
 .task-list h3 {
     margin-bottom: 20px;
-    color: #333;
+    color: #333333;
+    font-size: 1.125rem;
+    font-weight: 400;
 }
 
 #tasks {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
 }
 
 .task-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 20px;
-    background: white;
-    border: 2px solid #e0e0e0;
-    border-radius: 10px;
-    transition: all 0.3s ease;
+    padding: 16px 20px;
+    background: #FFFFFF;
+    border: 1px solid #E8E5E1;
+    border-radius: 0;
+    transition: all 0.2s ease;
 }
 
 .task-item:hover {
-    border-color: #667eea;
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+    border-color: #999999;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 }
 
 .task-info {
@@ -225,23 +242,24 @@ main {
 }
 
 .task-name {
-    font-weight: 600;
-    font-size: 1.1rem;
-    margin-bottom: 5px;
+    font-weight: 400;
+    font-size: 0.9375rem;
+    margin-bottom: 6px;
     display: flex;
     align-items: center;
     gap: 10px;
+    color: #333333;
 }
 
 .task-color-indicator {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px;
+    width: 16px;
+    height: 16px;
+    border-radius: 0;
 }
 
 .task-dates {
-    color: #666;
-    font-size: 0.9rem;
+    color: #6B6B6B;
+    font-size: 0.8125rem;
 }
 
 .task-progress {
@@ -251,97 +269,106 @@ main {
 
 .progress-bar {
     width: 100%;
-    height: 8px;
-    background: #e0e0e0;
-    border-radius: 4px;
+    height: 4px;
+    background: #E8E5E1;
+    border-radius: 0;
     overflow: hidden;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
 }
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    background: #333333;
     transition: width 0.3s ease;
 }
 
 .progress-text {
-    font-size: 0.85rem;
-    color: #666;
+    font-size: 0.75rem;
+    color: #6B6B6B;
 }
 
 .task-actions {
     display: flex;
-    gap: 5px;
+    gap: 6px;
 }
 
 .btn-small {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 6px;
+    padding: 6px 14px;
+    border: 1px solid #D4D1CC;
+    border-radius: 2px;
     cursor: pointer;
-    font-size: 0.85rem;
-    transition: all 0.3s ease;
+    font-size: 0.8125rem;
+    transition: all 0.2s ease;
+    background: #FFFFFF;
+    color: #333333;
 }
 
 .btn-edit {
-    background: #4A90E2;
-    color: white;
+    background: #FFFFFF;
+    color: #333333;
+    border-color: #D4D1CC;
 }
 
 .btn-edit:hover {
-    background: #357ABD;
+    background: #F5F3F0;
+    border-color: #B8B5B0;
 }
 
 .btn-delete {
-    background: #E74C3C;
-    color: white;
+    background: #FFFFFF;
+    color: #C74040;
+    border-color: #C74040;
 }
 
 .btn-delete:hover {
-    background: #C0392B;
+    background: #C74040;
+    color: #FFFFFF;
 }
 
 .gantt-container {
-    margin-top: 40px;
+    margin-top: 48px;
 }
 
 .gantt-container h3 {
     margin-bottom: 20px;
-    color: #333;
+    color: #333333;
+    font-size: 1.125rem;
+    font-weight: 400;
 }
 
 .gantt-controls {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     margin-bottom: 20px;
     align-items: center;
 }
 
 .gantt-controls label {
-    font-weight: 600;
-    color: #333;
+    font-weight: 400;
+    color: #333333;
+    font-size: 0.875rem;
 }
 
 .time-scale-select {
-    padding: 8px 16px;
-    border: 2px solid #e0e0e0;
-    border-radius: 6px;
-    font-size: 0.9rem;
+    padding: 8px 12px;
+    border: 1px solid #D4D1CC;
+    border-radius: 2px;
+    font-size: 0.875rem;
     cursor: pointer;
-    background: white;
-    transition: border-color 0.3s ease;
+    background: #FFFFFF;
+    transition: border-color 0.2s ease;
 }
 
 .time-scale-select:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #999999;
 }
 
 .gantt-chart {
-    background: white;
-    border: 2px solid #e0e0e0;
-    border-radius: 12px;
-    padding: 20px;
+    background: #FFFFFF;
+    border: 1px solid #E8E5E1;
+    border-radius: 0;
+    padding: 24px;
     overflow-x: auto;
     min-height: 300px;
 }
@@ -351,43 +378,44 @@ main {
     align-items: center;
     justify-content: center;
     min-height: 260px;
-    color: #999;
-    font-size: 1.1rem;
+    color: #999999;
+    font-size: 0.9375rem;
 }
 
 .gantt-grid {
     display: grid;
-    gap: 20px;
+    gap: 16px;
 }
 
 .gantt-header {
     display: grid;
     grid-template-columns: 200px 1fr;
     gap: 20px;
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #E8E5E1;
 }
 
 .gantt-header-title {
-    font-weight: 600;
-    color: #333;
+    font-weight: 400;
+    color: #333333;
+    font-size: 0.875rem;
 }
 
 .gantt-timeline-header {
     display: flex;
     overflow-x: auto;
-    border-bottom: 2px solid #e0e0e0;
+    border-bottom: 1px solid #E8E5E1;
 }
 
 .gantt-time-cell {
     flex: 1;
     min-width: 80px;
-    padding: 5px;
+    padding: 6px;
     text-align: center;
-    font-size: 0.8rem;
-    color: #666;
-    border-right: 1px solid #e0e0e0;
+    font-size: 0.75rem;
+    color: #6B6B6B;
+    border-right: 1px solid #F5F3F0;
 }
 
 .gantt-time-cell:last-child {
@@ -403,52 +431,53 @@ main {
     display: grid;
     grid-template-columns: 200px 1fr;
     gap: 20px;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
     align-items: center;
 }
 
 .gantt-task-name {
-    font-weight: 500;
-    color: #333;
+    font-weight: 400;
+    color: #333333;
     display: flex;
     align-items: center;
     gap: 8px;
+    font-size: 0.875rem;
 }
 
 .gantt-timeline-container {
     position: relative;
-    height: 40px;
-    background: #f8f9fa;
-    border-radius: 6px;
+    height: 36px;
+    background: #FAFAF9;
+    border-radius: 0;
 }
 
 .gantt-bar {
     position: absolute;
-    height: 30px;
-    top: 5px;
-    border-radius: 6px;
+    height: 24px;
+    top: 6px;
+    border-radius: 0;
     display: flex;
     align-items: center;
     padding: 0 10px;
     color: white;
-    font-size: 0.85rem;
-    font-weight: 600;
+    font-size: 0.75rem;
+    font-weight: 400;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+    box-shadow: none;
 }
 
 .gantt-bar:hover {
-    filter: brightness(1.1);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    filter: brightness(0.85);
+    transform: none;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 .gantt-today-line {
     position: absolute;
-    width: 2px;
+    width: 1px;
     height: 100%;
-    background: #E74C3C;
+    background: #C74040;
     z-index: 10;
 }
 
@@ -456,12 +485,12 @@ main {
     position: absolute;
     top: -20px;
     transform: translateX(-50%);
-    background: #E74C3C;
+    background: #C74040;
     color: white;
     padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 600;
+    border-radius: 0;
+    font-size: 0.6875rem;
+    font-weight: 400;
 }
 
 .gantt-date-labels {
@@ -469,16 +498,18 @@ main {
     justify-content: space-between;
     margin-top: 10px;
     padding-top: 10px;
-    border-top: 1px solid #e0e0e0;
-    font-size: 0.85rem;
-    color: #666;
+    border-top: 1px solid #E8E5E1;
+    font-size: 0.8125rem;
+    color: #6B6B6B;
 }
 
 footer {
-    background: #f8f9fa;
+    background: #FAFAF9;
     padding: 20px;
     text-align: center;
-    color: #666;
+    color: #999999;
+    font-size: 0.8125rem;
+    border-top: 1px solid #E8E5E1;
 }
 
 @media (max-width: 768px) {
