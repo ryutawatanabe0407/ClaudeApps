@@ -1,44 +1,31 @@
-# ClaudeApps 🎨
+# ClaudeApps
 
-## グラデーションジェネレーター
+## ガントチャートツール
 
-美しいCSSグラデーションを簡単に作成できるWebアプリケーションです。
+プロジェクトのタスクを視覚的に管理できるWebアプリケーションです。
 
 ### 機能
 
-- 🎨 インタラクティブなカラーピッカー
-- 🔄 グラデーションの向きと角度の調整
-- 📋 ワンクリックでCSSコードをコピー
-- 🎭 プリセットカラー
-- ⌨️ ランダムグラデーション生成（Rキー）
-- 📱 レスポンシブデザイン
-
-### デモ
-
-GitHub Pagesでデプロイされたアプリを確認できます。
+- タスクの追加・編集・削除
+- ガントチャートでの視覚的なタスク管理
+- 進捗率の設定と表示
+- Excelファイルのインポート・エクスポート
+- 日/週/月単位での表示切り替え
+- レスポンシブデザイン
 
 ### 技術スタック
 
 - HTML5
-- CSS3 (Animations, Grid, Flexbox)
+- CSS3
 - Vanilla JavaScript
-- GitHub Pages
+- SheetJS (xlsx)
 
 ### ローカルでの実行
 
 ```bash
-# リポジトリをクローン
-git clone <repository-url>
-
-# ブラウザで index.html を開く
-open index.html
+# ブラウザで gantt.html を開く
+open gantt.html
 ```
-
-### デプロイ
-
-GitHub Pages で直接公開しています。mainブランチにプッシュすると自動的にデプロイされます。
-
-🌐 公開URL: https://ryutawatanabe0407.github.io/ClaudeApps/
 
 ### ライセンス
 
