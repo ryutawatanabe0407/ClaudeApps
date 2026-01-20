@@ -20,11 +20,15 @@
 - Vanilla JavaScript
 - SheetJS (xlsx)
 
+### デモ
+
+🌐 公開URL: https://ryutawatanabe0407.github.io/ClaudeApps/
+
 ### ローカルでの実行
 
 ```bash
-# ブラウザで gantt.html を開く
-open gantt.html
+# ブラウザで index.html を開く
+open index.html
 ```
 
 ### ライセンス
