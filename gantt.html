@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ガントチャートツール</title>
+    <link rel="stylesheet" href="gantt-style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 ガントチャートツール</h1>
+            <p>プロジェクトのタスクを視覚的に管理しよう！</p>
+        </header>
+
+        <main>
+            <div class="controls">
+                <button class="btn btn-primary" id="addTaskBtn">+ タスクを追加</button>
+                <button class="btn btn-secondary" id="clearAllBtn">すべてクリア</button>
+                <button class="btn btn-secondary" id="exportBtn">エクスポート</button>
+            </div>
+
+            <div class="task-form" id="taskForm" style="display: none;">
+                <h3 id="formTitle">新しいタスク</h3>
+                <div class="form-group">
+                    <label for="taskName">タスク名</label>
+                    <input type="text" id="taskName" placeholder="タスク名を入力">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="startDate">開始日</label>
+                        <input type="date" id="startDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="endDate">終了日</label>
+                        <input type="date" id="endDate">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="progress">進捗率: <span id="progressValue">0</span>%</label>
+                    <input type="range" id="progress" min="0" max="100" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="taskColor">カラー</label>
+                    <input type="color" id="taskColor" value="#4A90E2">
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary" id="saveTaskBtn">保存</button>
+                    <button class="btn btn-secondary" id="cancelTaskBtn">キャンセル</button>
+                </div>
+            </div>
+
+            <div class="task-list" id="taskList">
+                <h3>タスク一覧</h3>
+                <div id="tasks"></div>
+            </div>
+
+            <div class="gantt-container">
+                <h3>ガントチャート</h3>
+                <div class="gantt-controls">
+                    <button class="btn-icon" id="zoomInBtn">🔍+</button>
+                    <button class="btn-icon" id="zoomOutBtn">🔍-</button>
+                    <button class="btn-icon" id="todayBtn">今日</button>
+                </div>
+                <div class="gantt-chart" id="ganttChart">
+                    <div class="gantt-empty">
+                        タスクを追加してガントチャートを表示しましょう
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Made with ❤️ for Project Management</p>
+        </footer>
+    </div>
+
+    <script src="gantt-script.js"></script>
+</body>
+</html>
