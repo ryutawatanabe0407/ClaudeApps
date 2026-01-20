@@ -58,6 +58,12 @@
             <div class="gantt-container">
                 <h3>ガントチャート</h3>
                 <div class="gantt-controls">
+                    <label for="timeScale">時間軸:</label>
+                    <select id="timeScale" class="time-scale-select">
+                        <option value="day">日単位</option>
+                        <option value="week">週単位</option>
+                        <option value="month">月単位</option>
+                    </select>
                     <button class="btn-icon" id="zoomInBtn">🔍+</button>
                     <button class="btn-icon" id="zoomOutBtn">🔍-</button>
                     <button class="btn-icon" id="todayBtn">今日</button>
@@ -75,6 +81,7 @@
         </footer>
     </div>
 
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
     <script src="gantt-script.js"></script>
 </body>
 </html>

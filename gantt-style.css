@@ -314,6 +314,27 @@ main {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
+    align-items: center;
+}
+
+.gantt-controls label {
+    font-weight: 600;
+    color: #333;
+}
+
+.time-scale-select {
+    padding: 8px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    background: white;
+    transition: border-color 0.3s ease;
+}
+
+.time-scale-select:focus {
+    outline: none;
+    border-color: #667eea;
 }
 
 .gantt-chart {
@@ -351,6 +372,26 @@ main {
 .gantt-header-title {
     font-weight: 600;
     color: #333;
+}
+
+.gantt-timeline-header {
+    display: flex;
+    overflow-x: auto;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.gantt-time-cell {
+    flex: 1;
+    min-width: 80px;
+    padding: 5px;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #666;
+    border-right: 1px solid #e0e0e0;
+}
+
+.gantt-time-cell:last-child {
+    border-right: none;
 }
 
 .gantt-timeline {
