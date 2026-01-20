@@ -41,6 +41,17 @@ class GanttChart {
             }
         });
 
+        // インポートボタン
+        document.getElementById('importBtn').addEventListener('click', () => {
+            document.getElementById('importFile').click();
+        });
+
+        // ファイル選択
+        document.getElementById('importFile').addEventListener('change', (e) => {
+            this.importFromExcel(e.target.files[0]);
+            e.target.value = ''; // ファイル選択をリセット
+        });
+
         // エクスポートボタン
         document.getElementById('exportBtn').addEventListener('click', () => {
             this.exportTasks();
@@ -510,6 +521,144 @@ class GanttChart {
         }
 
         return false;
+    }
+
+    importFromExcel(file) {
+        if (!file) {
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+
+                // 最初のシートを取得
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+
+                // シートをJSONに変換
+                const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+                if (jsonData.length < 2) {
+                    alert('インポートするデータが見つかりませんでした');
+                    return;
+                }
+
+                // ヘッダー行をスキップしてタスクを抽出
+                const tasks = [];
+                for (let i = 1; i < jsonData.length; i++) {
+                    const row = jsonData[i];
+                    if (!row || row.length < 4) continue;
+
+                    const taskName = row[0];
+                    const startDate = row[1];
+                    const endDate = row[2];
+                    const progressStr = row[3];
+
+                    if (!taskName || !startDate || !endDate) continue;
+
+                    // 進捗率から数値を抽出
+                    let progress = 0;
+                    if (progressStr) {
+                        const match = String(progressStr).match(/\d+/);
+                        if (match) {
+                            progress = parseInt(match[0]);
+                        }
+                    }
+
+                    // 日付の形式を変換
+                    const formattedStartDate = this.parseExcelDate(startDate);
+                    const formattedEndDate = this.parseExcelDate(endDate);
+
+                    if (!formattedStartDate || !formattedEndDate) continue;
+
+                    // タスクの色を推測（既存のタスクと同じ色、または青系の色をランダムに生成）
+                    const colors = ['#4A90E2', '#5CB85C', '#F0AD4E', '#D9534F', '#5BC0DE', '#9B59B6', '#E91E63'];
+                    const color = colors[tasks.length % colors.length];
+
+                    tasks.push({
+                        id: Date.now() + i,
+                        name: taskName,
+                        startDate: formattedStartDate,
+                        endDate: formattedEndDate,
+                        progress: Math.min(100, Math.max(0, progress)),
+                        color: color
+                    });
+                }
+
+                if (tasks.length === 0) {
+                    alert('有効なタスクが見つかりませんでした');
+                    return;
+                }
+
+                // インポート前に確認
+                const confirmMessage = `${tasks.length}件のタスクをインポートします。\n既存のタスクは上書きされますが、よろしいですか？`;
+                if (!confirm(confirmMessage)) {
+                    return;
+                }
+
+                // タスクを置き換え
+                this.tasks = tasks;
+                this.saveTasks();
+                this.renderTasks();
+                this.renderGanttChart();
+
+                alert(`${tasks.length}件のタスクをインポートしました`);
+            } catch (error) {
+                console.error('インポートエラー:', error);
+                alert('ファイルの読み込みに失敗しました。正しい形式のExcelファイルを選択してください。');
+            }
+        };
+
+        reader.readAsArrayBuffer(file);
+    }
+
+    parseExcelDate(dateValue) {
+        if (!dateValue) return null;
+
+        // 既にYYYY-MM-DD形式の場合
+        if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+            return dateValue;
+        }
+
+        // YYYY/MM/DD形式の場合
+        if (typeof dateValue === 'string' && /^\d{4}\/\d{2}\/\d{2}$/.test(dateValue)) {
+            return dateValue.replace(/\//g, '-');
+        }
+
+        // Excelのシリアル値の場合（数値）
+        if (typeof dateValue === 'number') {
+            const date = new Date((dateValue - 25569) * 86400 * 1000);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // Date オブジェクトの場合
+        if (dateValue instanceof Date) {
+            const year = dateValue.getFullYear();
+            const month = String(dateValue.getMonth() + 1).padStart(2, '0');
+            const day = String(dateValue.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // その他の文字列の場合、パースを試みる
+        try {
+            const date = new Date(dateValue);
+            if (!isNaN(date.getTime())) {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+        } catch (e) {
+            // パース失敗
+        }
+
+        return null;
     }
 }
 
