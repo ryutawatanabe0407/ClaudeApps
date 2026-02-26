@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>🌵 ディッキアキャッチ</title>
+    <title>🔫 ディッキアシューター</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,13 +13,13 @@
         <!-- スタート画面 -->
         <div id="startScreen" class="screen">
             <div class="title-area">
-                <h1 class="game-title">🌵 ディッキアキャッチ</h1>
-                <p class="game-subtitle">落ちてくるディッキアをキャッチしよう！</p>
+                <h1 class="game-title">🔫 ディッキアシューター</h1>
+                <p class="game-subtitle">ディッキアを撃ちまくれ！ FPS</p>
             </div>
             <div class="menu-area">
                 <button class="btn btn-start" id="startBtn">
-                    <span class="btn-icon">🎮</span>
-                    スタート
+                    <span class="btn-icon">🎯</span>
+                    ゲームスタート
                 </button>
                 <div class="high-score">
                     <span class="label">ハイスコア:</span>
@@ -29,10 +29,12 @@
             <div class="instructions">
                 <h3>遊び方</h3>
                 <ul>
-                    <li>📱 画面をタップ/ドラッグしてバスケットを移動</li>
-                    <li>🌵 ディッキアをキャッチしてポイントGET</li>
-                    <li>💣 爆弾を避けよう！</li>
-                    <li>⏱️ 時間が経つほどスピードアップ</li>
+                    <li>🖱️ マウスで照準を合わせる</li>
+                    <li>🔫 クリックで射撃</li>
+                    <li>🌵 ディッキアを撃ってスコアGET</li>
+                    <li>💥 連続ヒットでコンボボーナス</li>
+                    <li>⏱️ 制限時間60秒</li>
+                    <li>🔄 Rキーでリロード（弾数30発）</li>
                 </ul>
             </div>
             <a href="../index.html" class="back-link">← ガントチャートツールへ戻る</a>
@@ -41,28 +43,57 @@
         <!-- ゲーム画面 -->
         <div id="gameScreen" class="screen" style="display: none;">
             <div class="game-header">
-                <div class="score-display">
-                    <span class="label">スコア:</span>
-                    <span class="value" id="scoreDisplay">0</span>
+                <div class="hud-left">
+                    <div class="score-display">
+                        <span class="label">スコア:</span>
+                        <span class="value" id="scoreDisplay">0</span>
+                    </div>
+                    <div class="combo-display" id="comboDisplay" style="display: none;">
+                        <span class="combo-value" id="comboValue">0</span>
+                        <span class="combo-label">COMBO!</span>
+                    </div>
                 </div>
-                <div class="lives-display">
-                    <span class="label">❤️</span>
-                    <span class="value" id="livesDisplay">3</span>
+                <div class="hud-right">
+                    <div class="time-display">
+                        <span class="label">⏱️</span>
+                        <span class="value" id="timeDisplay">60</span>
+                    </div>
+                    <div class="ammo-display">
+                        <span class="label">🔫</span>
+                        <span class="value" id="ammoDisplay">30/30</span>
+                    </div>
                 </div>
-                <button class="btn-pause" id="pauseBtn">⏸</button>
             </div>
 
             <canvas id="gameCanvas"></canvas>
 
-            <div class="game-info">
-                <p>タップ/ドラッグで移動</p>
+            <!-- クロスヘア（照準） -->
+            <div class="crosshair">
+                <div class="crosshair-dot"></div>
+                <div class="crosshair-line crosshair-top"></div>
+                <div class="crosshair-line crosshair-bottom"></div>
+                <div class="crosshair-line crosshair-left"></div>
+                <div class="crosshair-line crosshair-right"></div>
+            </div>
+
+            <!-- リロード表示 -->
+            <div id="reloadDisplay" class="reload-display" style="display: none;">
+                <span class="reload-text">🔄 RELOADING...</span>
+            </div>
+
+            <!-- ヒットマーカー -->
+            <div id="hitMarker" class="hit-marker" style="display: none;">
+                <div class="hit-line hit-line-1"></div>
+                <div class="hit-line hit-line-2"></div>
+                <div class="hit-line hit-line-3"></div>
+                <div class="hit-line hit-line-4"></div>
             </div>
         </div>
 
         <!-- ゲームオーバー画面 -->
         <div id="gameOverScreen" class="screen" style="display: none;">
             <div class="game-over-content">
-                <h1 class="game-over-title">ゲームオーバー</h1>
+                <h1 class="game-over-title">TIME UP!</h1>
                 <div class="final-score-area">
                     <p class="label">最終スコア</p>
                     <p class="score" id="finalScore">0</p>
@@ -72,12 +103,16 @@
                 </div>
                 <div class="stats">
                     <div class="stat-item">
-                        <span class="stat-label">キャッチ数:</span>
-                        <span class="stat-value" id="catchCount">0</span>
+                        <span class="stat-label">ヒット数:</span>
+                        <span class="stat-value" id="hitCount">0</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-label">最高コンボ:</span>
                         <span class="stat-value" id="maxCombo">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">命中率:</span>
+                        <span class="stat-value" id="accuracy">0%</span>
                     </div>
                 </div>
                 <div class="button-group">
@@ -90,21 +125,6 @@
                         メニュー
                     </button>
                 </div>
-            </div>
-        </div>
-
-        <!-- ポーズ画面 -->
-        <div id="pauseScreen" class="screen overlay" style="display: none;">
-            <div class="pause-content">
-                <h2>⏸ ポーズ中</h2>
-                <button class="btn btn-resume" id="resumeBtn">
-                    <span class="btn-icon">▶️</span>
-                    再開
-                </button>
-                <button class="btn btn-menu-pause" id="menuBtnPause">
-                    <span class="btn-icon">🏠</span>
-                    メニューに戻る
-                </button>
             </div>
         </div>
     </div>

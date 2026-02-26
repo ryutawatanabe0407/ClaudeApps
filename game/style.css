@@ -2,364 +2,486 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
 }
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+    color: #fff;
     overflow: hidden;
-    touch-action: none;
+    cursor: none; /* FPS風カーソル非表示 */
 }
 
 .container {
-    width: 100%;
-    max-width: 600px;
+    width: 100vw;
     height: 100vh;
     position: relative;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
-/* 画面共通 */
+/* ========== スクリーン共通 ========== */
 .screen {
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
-    padding: 20px;
-    overflow-y: auto;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
-/* スタート画面 */
+/* ========== スタート画面 ========== */
 #startScreen {
-    justify-content: center;
-    align-items: center;
-    text-align: center;
+    background: linear-gradient(135deg, #0f3460 0%, #16213e 50%, #0a0a0a 100%);
+    padding: 20px;
+    z-index: 10;
+    cursor: auto;
 }
 
 .title-area {
+    text-align: center;
     margin-bottom: 40px;
     animation: fadeInDown 0.8s ease;
 }
 
 .game-title {
-    font-size: 3em;
-    color: #fff;
-    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    font-size: 4rem;
+    font-weight: bold;
+    text-shadow: 0 0 20px rgba(0, 255, 0, 0.8),
+                 0 0 40px rgba(0, 255, 0, 0.5),
+                 0 4px 8px rgba(0, 0, 0, 0.8);
     margin-bottom: 10px;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
 }
 
 .game-subtitle {
-    font-size: 1.2em;
-    color: rgba(255, 255, 255, 0.9);
-    font-weight: 300;
+    font-size: 1.5rem;
+    color: #0ff;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+    letter-spacing: 2px;
 }
 
 .menu-area {
-    width: 100%;
-    max-width: 300px;
-    animation: fadeInUp 0.8s ease 0.2s both;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 40px;
 }
 
 .btn {
-    width: 100%;
-    padding: 18px 30px;
-    border: none;
-    border-radius: 50px;
-    font-size: 1.3em;
+    padding: 18px 45px;
+    font-size: 1.5rem;
     font-weight: bold;
+    border: 3px solid #0f0;
+    background: linear-gradient(135deg, #001a00 0%, #003300 100%);
+    color: #0f0;
+    border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.5),
+                inset 0 0 20px rgba(0, 255, 0, 0.1);
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    margin-bottom: 20px;
 }
 
-.btn-start {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    color: white;
+.btn:hover {
+    background: linear-gradient(135deg, #003300 0%, #005500 100%);
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.8),
+                inset 0 0 30px rgba(0, 255, 0, 0.2);
+    transform: scale(1.05);
 }
 
-.btn-start:active {
+.btn:active {
     transform: scale(0.95);
 }
 
 .btn-icon {
-    font-size: 1.2em;
+    font-size: 1.8rem;
 }
 
 .high-score {
-    background: rgba(255, 255, 255, 0.2);
-    padding: 15px;
-    border-radius: 15px;
-    color: white;
-    font-size: 1.2em;
+    font-size: 1.5rem;
+    padding: 15px 30px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid #0ff;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
 }
 
 .high-score .label {
-    opacity: 0.8;
+    color: #0ff;
     margin-right: 10px;
 }
 
 .high-score .value {
+    color: #ff0;
     font-weight: bold;
-    font-size: 1.5em;
+    font-size: 1.8rem;
+    text-shadow: 0 0 10px rgba(255, 255, 0, 0.8);
 }
 
 .instructions {
-    margin-top: 40px;
-    max-width: 400px;
-    animation: fadeInUp 0.8s ease 0.4s both;
+    max-width: 600px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 30px;
+    border-radius: 12px;
+    border: 2px solid rgba(0, 255, 0, 0.3);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
 }
 
 .instructions h3 {
-    color: white;
+    font-size: 1.8rem;
     margin-bottom: 15px;
-    font-size: 1.3em;
+    color: #0f0;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
 }
 
 .instructions ul {
     list-style: none;
-    text-align: left;
-    color: rgba(255, 255, 255, 0.9);
+    padding: 0;
 }
 
 .instructions li {
-    padding: 10px;
-    margin-bottom: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    line-height: 1.6;
+    font-size: 1.2rem;
+    margin: 12px 0;
+    padding-left: 30px;
+    position: relative;
+    color: #ccc;
+}
+
+.instructions li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: #0f0;
+    font-size: 1.5rem;
 }
 
 .back-link {
     position: absolute;
-    bottom: 20px;
+    top: 20px;
     left: 20px;
-    color: rgba(255, 255, 255, 0.8);
+    color: #0ff;
     text-decoration: none;
-    font-size: 0.9em;
-    padding: 10px 15px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
+    font-size: 1.2rem;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid #0ff;
+    border-radius: 8px;
     transition: all 0.3s ease;
 }
 
 .back-link:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
+    background: rgba(0, 255, 255, 0.2);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
 }
 
-/* ゲーム画面 */
+/* ========== ゲーム画面 ========== */
 #gameScreen {
-    padding: 10px;
-    justify-content: flex-start;
-    gap: 10px;
+    background: linear-gradient(135deg, #0a3d0a 0%, #1a1a1a 100%);
 }
 
 .game-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 15px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 15px;
-    margin-bottom: 10px;
-}
-
-.score-display,
-.lives-display {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: white;
-    font-size: 1.1em;
-}
-
-.score-display .value,
-.lives-display .value {
-    font-weight: bold;
-    font-size: 1.3em;
-}
-
-.btn-pause {
-    background: rgba(255, 255, 255, 0.3);
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    font-size: 1.2em;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.btn-pause:active {
-    transform: scale(0.9);
-    background: rgba(255, 255, 255, 0.5);
-}
-
-#gameCanvas {
-    width: 100%;
-    height: 450px;
-    max-height: 60vh;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    touch-action: none;
-}
-
-.game-info {
-    text-align: center;
-    color: white;
-    padding: 10px;
-    font-size: 0.9em;
-    opacity: 0.7;
-}
-
-/* ゲームオーバー画面 */
-#gameOverScreen {
-    justify-content: center;
-    align-items: center;
-    background: rgba(0, 0, 0, 0.5);
-}
-
-.game-over-content {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 40px 30px;
-    border-radius: 20px;
-    text-align: center;
-    max-width: 400px;
-    width: 90%;
-    animation: scaleIn 0.5s ease;
-}
-
-.game-over-title {
-    font-size: 2.5em;
-    color: #764ba2;
-    margin-bottom: 20px;
-}
-
-.final-score-area {
-    margin: 30px 0;
-}
-
-.final-score-area .label {
-    font-size: 1.1em;
-    color: #666;
-    margin-bottom: 10px;
-}
-
-.final-score-area .score {
-    font-size: 3.5em;
-    font-weight: bold;
-    color: #667eea;
-}
-
-.new-high-score {
-    font-size: 1.3em;
-    color: #f5576c;
-    font-weight: bold;
-    margin: 15px 0;
-    animation: pulse 1s infinite;
-}
-
-.stats {
-    display: flex;
-    justify-content: space-around;
-    margin: 25px 0;
-    padding: 20px;
-    background: rgba(102, 126, 234, 0.1);
-    border-radius: 15px;
-}
-
-.stat-item {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.stat-label {
-    font-size: 0.9em;
-    color: #666;
-}
-
-.stat-value {
-    font-size: 1.8em;
-    font-weight: bold;
-    color: #667eea;
-}
-
-.button-group {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 25px;
-}
-
-.btn-restart {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-}
-
-.btn-menu,
-.btn-menu-pause {
-    background: rgba(102, 126, 234, 0.2);
-    color: #667eea;
-}
-
-.btn-menu:active,
-.btn-menu-pause:active,
-.btn-restart:active {
-    transform: scale(0.95);
-}
-
-/* ポーズ画面 */
-.overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    z-index: 100;
+    pointer-events: none;
+}
+
+.hud-left, .hud-right {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.score-display, .time-display, .ammo-display {
     background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(5px);
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: 2px solid rgba(0, 255, 0, 0.5);
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.score-display .label, .time-display .label, .ammo-display .label {
+    color: #0f0;
+    font-weight: bold;
+}
+
+.score-display .value, .time-display .value, .ammo-display .value {
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.8rem;
+}
+
+.combo-display {
+    background: rgba(255, 0, 0, 0.8);
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 2px solid #ff0;
+    box-shadow: 0 0 20px rgba(255, 255, 0, 0.8);
+    animation: pulse 0.5s ease-in-out infinite;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.combo-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #ff0;
+    text-shadow: 0 0 10px rgba(255, 255, 0, 1);
+}
+
+.combo-label {
+    font-size: 1.2rem;
+    color: #fff;
+    font-weight: bold;
+}
+
+#gameCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    cursor: none;
+}
+
+/* ========== クロスヘア（照準） ========== */
+.crosshair {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    pointer-events: none;
     z-index: 1000;
 }
 
-.pause-content {
-    background: white;
-    padding: 40px;
-    border-radius: 20px;
-    text-align: center;
-    animation: scaleIn 0.3s ease;
+.crosshair-dot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 4px;
+    height: 4px;
+    background: #0f0;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.8),
+                0 0 20px rgba(0, 255, 0, 0.5);
 }
 
-.pause-content h2 {
-    font-size: 2em;
-    color: #764ba2;
+.crosshair-line {
+    position: absolute;
+    background: #0f0;
+    box-shadow: 0 0 5px rgba(0, 255, 0, 0.8);
+}
+
+.crosshair-top {
+    width: 2px;
+    height: 12px;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.crosshair-bottom {
+    width: 2px;
+    height: 12px;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.crosshair-left {
+    width: 12px;
+    height: 2px;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.crosshair-right {
+    width: 12px;
+    height: 2px;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* ========== リロード表示 ========== */
+.reload-display {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.9);
+    padding: 30px 60px;
+    border-radius: 12px;
+    border: 3px solid #ff0;
+    box-shadow: 0 0 30px rgba(255, 255, 0, 0.8);
+    z-index: 500;
+    pointer-events: none;
+}
+
+.reload-text {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #ff0;
+    text-shadow: 0 0 15px rgba(255, 255, 0, 1);
+    animation: pulse 0.5s ease-in-out infinite;
+}
+
+/* ========== ヒットマーカー ========== */
+.hit-marker {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    pointer-events: none;
+    z-index: 1001;
+    animation: hitFlash 0.2s ease-out;
+}
+
+.hit-line {
+    position: absolute;
+    width: 20px;
+    height: 3px;
+    background: #ff0;
+    box-shadow: 0 0 10px rgba(255, 255, 0, 1);
+}
+
+.hit-line-1 {
+    top: 5px;
+    left: 5px;
+    transform: rotate(-45deg);
+}
+
+.hit-line-2 {
+    top: 5px;
+    right: 5px;
+    transform: rotate(45deg);
+}
+
+.hit-line-3 {
+    bottom: 5px;
+    left: 5px;
+    transform: rotate(45deg);
+}
+
+.hit-line-4 {
+    bottom: 5px;
+    right: 5px;
+    transform: rotate(-45deg);
+}
+
+/* ========== ゲームオーバー画面 ========== */
+#gameOverScreen {
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 200;
+    cursor: auto;
+}
+
+.game-over-content {
+    text-align: center;
+    animation: fadeInUp 0.8s ease;
+}
+
+.game-over-title {
+    font-size: 4rem;
+    color: #f00;
+    text-shadow: 0 0 20px rgba(255, 0, 0, 0.8),
+                 0 0 40px rgba(255, 0, 0, 0.5);
+    margin-bottom: 30px;
+    animation: pulse 1s ease-in-out infinite;
+}
+
+.final-score-area {
     margin-bottom: 30px;
 }
 
-.btn-resume {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    margin-bottom: 15px;
+.final-score-area .label {
+    font-size: 1.5rem;
+    color: #0ff;
+    margin-bottom: 10px;
 }
 
-/* アニメーション */
+.final-score-area .score {
+    font-size: 5rem;
+    font-weight: bold;
+    color: #ff0;
+    text-shadow: 0 0 20px rgba(255, 255, 0, 0.8);
+}
+
+.new-high-score {
+    font-size: 2rem;
+    color: #0f0;
+    text-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+    animation: bounce 1s ease-in-out infinite;
+    margin-bottom: 20px;
+}
+
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px 30px;
+    border-radius: 8px;
+    border: 2px solid rgba(0, 255, 0, 0.5);
+}
+
+.stat-label {
+    display: block;
+    font-size: 1.2rem;
+    color: #0ff;
+    margin-bottom: 8px;
+}
+
+.stat-value {
+    display: block;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #ff0;
+}
+
+.button-group {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-restart, .btn-menu {
+    padding: 15px 35px;
+    font-size: 1.3rem;
+}
+
+/* ========== アニメーション ========== */
 @keyframes fadeInDown {
     from {
         opacity: 0;
-        transform: translateY(-30px);
+        transform: translateY(-50px);
     }
     to {
         opacity: 1;
@@ -370,7 +492,7 @@ body {
 @keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(50px);
     }
     to {
         opacity: 1;
@@ -378,57 +500,70 @@ body {
     }
 }
 
-@keyframes scaleIn {
-    from {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
 @keyframes pulse {
     0%, 100% {
         transform: scale(1);
+        opacity: 1;
     }
     50% {
         transform: scale(1.05);
+        opacity: 0.8;
     }
 }
 
-/* レスポンシブ対応 */
-@media (max-width: 480px) {
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes hitFlash {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(0.5);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+}
+
+/* ========== レスポンシブ ========== */
+@media (max-width: 768px) {
     .game-title {
-        font-size: 2.5em;
+        font-size: 2.5rem;
+    }
+
+    .game-subtitle {
+        font-size: 1.2rem;
+    }
+
+    .btn {
+        font-size: 1.2rem;
+        padding: 12px 30px;
     }
 
     .instructions {
-        margin-top: 30px;
+        font-size: 0.9rem;
+        padding: 20px;
     }
 
     .game-over-title {
-        font-size: 2em;
+        font-size: 2.5rem;
     }
 
     .final-score-area .score {
-        font-size: 3em;
-    }
-}
-
-@media (max-height: 700px) {
-    .title-area {
-        margin-bottom: 20px;
+        font-size: 3rem;
     }
 
-    .instructions {
-        margin-top: 20px;
+    body {
+        cursor: auto;
     }
 
-    .instructions li {
-        padding: 8px;
-        margin-bottom: 5px;
-        font-size: 0.9em;
+    #gameCanvas {
+        cursor: auto;
     }
 }
