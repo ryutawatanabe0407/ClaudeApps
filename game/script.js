@@ -13,7 +13,7 @@ const CONFIG = {
 };
 
 // ディッキア画像のパス
-const DYCKIA_IMAGE_PATH = 'assets/dyckia.png';
+const DYCKIA_IMAGE_PATH = 'assets/dyckia.svg';
 
 // ゲーム状態
 const GAME_STATE = {
