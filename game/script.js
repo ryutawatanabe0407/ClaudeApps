@@ -69,18 +69,19 @@ class Game {
         this.updateHighScoreDisplay();
     }
 
-    setupCanvas() {
-        const resizeCanvas = () => {
-            const rect = this.canvas.getBoundingClientRect();
-            // iPhoneに最適化：固定の高さと幅の比率を使用
-            this.canvas.width = rect.width;
-            this.canvas.height = rect.height;
-            this.basket.y = this.canvas.height - CONFIG.BASKET_HEIGHT - 10;
-            this.basket.x = this.canvas.width / 2 - CONFIG.BASKET_WIDTH / 2;
-        };
+    resizeCanvas() {
+        const rect = this.canvas.getBoundingClientRect();
+        // iPhoneに最適化：固定の高さと幅の比率を使用
+        this.canvas.width = rect.width;
+        this.canvas.height = rect.height;
+        console.log('📐 Canvas resized:', this.canvas.width, 'x', this.canvas.height);
+        this.basket.y = this.canvas.height - CONFIG.BASKET_HEIGHT - 10;
+        this.basket.x = this.canvas.width / 2 - CONFIG.BASKET_WIDTH / 2;
+    }
 
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
+    setupCanvas() {
+        this.resizeCanvas();
+        window.addEventListener('resize', () => this.resizeCanvas());
     }
 
     setupEventListeners() {
@@ -169,9 +170,12 @@ class Game {
         this.fallingObjects = [];
         this.particles = [];
 
+        this.showScreen('gameScreen');
+
+        // 画面表示後にキャンバスサイズを再計算（display:noneだとサイズが0になるため）
+        this.resizeCanvas();
         this.basket.x = this.canvas.width / 2 - CONFIG.BASKET_WIDTH / 2;
 
-        this.showScreen('gameScreen');
         this.updateUI();
         this.gameLoop();
     }
