@@ -1,54 +1,45 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
   <defs>
-    <!-- グラデーション：中心の光 -->
-    <radialGradient id="centerGlow" cx="50%" cy="40%">
-      <stop offset="0%" style="stop-color:#B8E6B8;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#7FC07F;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#4A8F4A;stop-opacity:1" />
+    <!-- 中心部のグラデーション -->
+    <radialGradient id="center" cx="50%" cy="60%">
+      <stop offset="0%" style="stop-color:#C8F0C8;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#8FC68F;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#5FA05F;stop-opacity:1" />
     </radialGradient>
 
-    <!-- 葉のグラデーション：手前（明るい） -->
-    <linearGradient id="leafFront" x1="0%" y1="0%" x2="0%" y2="100%">
+    <!-- 葉のグラデーション（手前・明るい） -->
+    <radialGradient id="leafFront" cx="40%" cy="60%">
       <stop offset="0%" style="stop-color:#C8F0C8;stop-opacity:1" />
-      <stop offset="15%" style="stop-color:#A8D8A8;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#7FC07F;stop-opacity:1" />
-      <stop offset="85%" style="stop-color:#5FA05F;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#4A8F4A;stop-opacity:1" />
-    </linearGradient>
+      <stop offset="40%" style="stop-color:#A8D8A8;stop-opacity:1" />
+      <stop offset="80%" style="stop-color:#6FAF6F;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4A8A4A;stop-opacity:1" />
+    </radialGradient>
 
-    <!-- 葉のグラデーション：中間 -->
-    <linearGradient id="leafMiddle" x1="0%" y1="0%" x2="0%" y2="100%">
+    <!-- 葉のグラデーション（中間） -->
+    <radialGradient id="leafMid" cx="40%" cy="55%">
       <stop offset="0%" style="stop-color:#A8D8A8;stop-opacity:1" />
-      <stop offset="20%" style="stop-color:#8FC68F;stop-opacity:1" />
-      <stop offset="60%" style="stop-color:#6FAF6F;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#4A8F4A;stop-opacity:1" />
-    </linearGradient>
+      <stop offset="50%" style="stop-color:#7FB07F;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4A8A4A;stop-opacity:1" />
+    </radialGradient>
 
-    <!-- 葉のグラデーション：奥（暗い） -->
-    <linearGradient id="leafBack" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#7FB07F;stop-opacity:0.9" />
-      <stop offset="30%" style="stop-color:#5F9E5F;stop-opacity:0.9" />
-      <stop offset="70%" style="stop-color:#4A8A4A;stop-opacity:0.9" />
-      <stop offset="100%" style="stop-color:#356535;stop-opacity:0.9" />
-    </linearGradient>
+    <!-- 葉のグラデーション（奥・暗い） -->
+    <radialGradient id="leafBack" cx="40%" cy="50%">
+      <stop offset="0%" style="stop-color:#8FC68F;stop-opacity:0.9" />
+      <stop offset="60%" style="stop-color:#5F9E5F;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#356535;stop-opacity:0.85" />
+    </radialGradient>
 
     <!-- 影 -->
-    <radialGradient id="shadowGrad" cx="50%" cy="50%">
+    <radialGradient id="shadow" cx="50%" cy="50%">
       <stop offset="0%" style="stop-color:#000;stop-opacity:0.4" />
-      <stop offset="60%" style="stop-color:#000;stop-opacity:0.15" />
+      <stop offset="70%" style="stop-color:#000;stop-opacity:0.15" />
       <stop offset="100%" style="stop-color:#000;stop-opacity:0" />
     </radialGradient>
 
-    <!-- トゲのハイライト -->
-    <filter id="spineGlow">
-      <feGaussianBlur stdDeviation="0.8" />
-      <feColorMatrix type="saturate" values="1.3"/>
-    </filter>
-
     <!-- 葉の影 -->
     <filter id="leafShadow">
-      <feGaussianBlur in="SourceAlpha" stdDeviation="1.5"/>
-      <feOffset dx="0" dy="1.5" result="offsetblur"/>
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1.2"/>
+      <feOffset dx="0.5" dy="2" result="offsetblur"/>
       <feComponentTransfer>
         <feFuncA type="linear" slope="0.4"/>
       </feComponentTransfer>
@@ -60,141 +51,141 @@
   </defs>
 
   <!-- 地面の影 -->
-  <ellipse cx="100" cy="175" rx="70" ry="18" fill="url(#shadowGrad)" opacity="0.5"/>
+  <ellipse cx="100" cy="160" rx="65" ry="20" fill="url(#shadow)" opacity="0.5"/>
 
-  <!-- 中心部のベース -->
-  <g transform="translate(100, 105)">
-    <circle r="18" fill="url(#centerGlow)" opacity="0.8"/>
-  </g>
+  <!-- 斜め上から見たディッキア（手前が下、奥が上） -->
+  <g transform="translate(100, 110)">
 
-  <!-- 後方の葉（暗く、小さく） - 上方斜視図の奥側 -->
-  <g transform="translate(100, 105)" opacity="0.75">
-    <!-- 後方中央 -->
-    <path d="M 0,-12 Q -2,-28 -3,-44 Q -3.5,-56 -4,-68 Q -4,-74 -3.5,-77 L -1.5,-75 Q -2,-68 -2,-56 Q -1.5,-40 0,-20 Z"
-          fill="url(#leafBack)" stroke="#356535" stroke-width="0.8" filter="url(#leafShadow)" transform="rotate(0)"/>
+    <!-- 奥側の葉（上部・小さく・暗く） -->
+    <g opacity="0.75">
+      <!-- 奥中央 -->
+      <ellipse cx="0" cy="-45" rx="7" ry="28" fill="url(#leafBack)" stroke="#356535" stroke-width="0.8"
+               filter="url(#leafShadow)" transform="rotate(0) scale(0.85, 0.7)"/>
 
-    <path d="M 0,-12 Q 2,-28 3,-44 Q 3.5,-56 4,-68 Q 4,-74 3.5,-77 L 1.5,-75 Q 2,-68 2,-56 Q 1.5,-40 0,-20 Z"
-          fill="url(#leafBack)" stroke="#356535" stroke-width="0.8" filter="url(#leafShadow)" transform="rotate(180)"/>
+      <!-- 奥左右 -->
+      <ellipse cx="0" cy="-45" rx="7" ry="28" fill="url(#leafBack)" stroke="#356535" stroke-width="0.8"
+               filter="url(#leafShadow)" transform="rotate(45) scale(0.85, 0.7)"/>
 
-    <!-- 後方左右 -->
-    <path d="M 0,-12 Q -2,-28 -3,-44 Q -3.5,-56 -4,-68 Q -4,-74 -3.5,-77 L -1.5,-75 Q -2,-68 -2,-56 Q -1.5,-40 0,-20 Z"
-          fill="url(#leafBack)" stroke="#356535" stroke-width="0.8" filter="url(#leafShadow)" transform="rotate(40)"/>
+      <ellipse cx="0" cy="-45" rx="7" ry="28" fill="url(#leafBack)" stroke="#356535" stroke-width="0.8"
+               filter="url(#leafShadow)" transform="rotate(-45) scale(0.85, 0.7)"/>
 
-    <path d="M 0,-12 Q 2,-28 3,-44 Q 3.5,-56 4,-68 Q 4,-74 3.5,-77 L 1.5,-75 Q 2,-68 2,-56 Q 1.5,-40 0,-20 Z"
-          fill="url(#leafBack)" stroke="#356535" stroke-width="0.8" filter="url(#leafShadow)" transform="rotate(140)"/>
-  </g>
+      <!-- 奥サイド -->
+      <ellipse cx="0" cy="-42" rx="6" ry="26" fill="url(#leafBack)" stroke="#356535" stroke-width="0.8"
+               filter="url(#leafShadow)" transform="rotate(70) scale(0.8, 0.65)"/>
 
-  <!-- 中間の葉 - 左右側面 -->
-  <g transform="translate(100, 105)" opacity="0.88">
-    <!-- 左側面の葉 -->
-    <path d="M 0,-15 Q -4,-35 -6,-55 Q -7,-68 -8,-82 Q -8.5,-90 -8,-95 L -5.5,-92 Q -6,-83 -5.5,-72 Q -4,-50 0,-25 Z"
-          fill="url(#leafMiddle)" stroke="#4A8A4A" stroke-width="1" filter="url(#leafShadow)" transform="rotate(85)">
-      <animate attributeName="opacity" values="0.88;0.92;0.88" dur="3s" repeatCount="indefinite"/>
-    </path>
-
-    <path d="M 0,-15 Q -4,-35 -6,-55 Q -7,-68 -8,-82 Q -8.5,-90 -8,-95 L -5.5,-92 Q -6,-83 -5.5,-72 Q -4,-50 0,-25 Z"
-          fill="url(#leafMiddle)" stroke="#4A8A4A" stroke-width="1" filter="url(#leafShadow)" transform="rotate(65)"/>
-
-    <path d="M 0,-15 Q -4,-35 -6,-55 Q -7,-68 -8,-82 Q -8.5,-90 -8,-95 L -5.5,-92 Q -6,-83 -5.5,-72 Q -4,-50 0,-25 Z"
-          fill="url(#leafMiddle)" stroke="#4A8A4A" stroke-width="1" filter="url(#leafShadow)" transform="rotate(105)"/>
-
-    <!-- 右側面の葉 -->
-    <path d="M 0,-15 Q 4,-35 6,-55 Q 7,-68 8,-82 Q 8.5,-90 8,-95 L 5.5,-92 Q 6,-83 5.5,-72 Q 4,-50 0,-25 Z"
-          fill="url(#leafMiddle)" stroke="#4A8A4A" stroke-width="1" filter="url(#leafShadow)" transform="rotate(-85)">
-      <animate attributeName="opacity" values="0.88;0.92;0.88" dur="2.8s" repeatCount="indefinite"/>
-    </path>
-
-    <path d="M 0,-15 Q 4,-35 6,-55 Q 7,-68 8,-82 Q 8.5,-90 8,-95 L 5.5,-92 Q 6,-83 5.5,-72 Q 4,-50 0,-25 Z"
-          fill="url(#leafMiddle)" stroke="#4A8A4A" stroke-width="1" filter="url(#leafShadow)" transform="rotate(-65)"/>
-
-    <path d="M 0,-15 Q 4,-35 6,-55 Q 7,-68 8,-82 Q 8.5,-90 8,-95 L 5.5,-92 Q 6,-83 5.5,-72 Q 4,-50 0,-25 Z"
-          fill="url(#leafMiddle)" stroke="#4A8A4A" stroke-width="1" filter="url(#leafShadow)" transform="rotate(-105)"/>
-  </g>
-
-  <!-- 手前の葉（最も明るく、大きく） - 上方斜視図の手前側 -->
-  <g transform="translate(100, 105)">
-    <!-- 左前方の葉 -->
-    <path d="M 0,-18 Q -5,-42 -8,-66 Q -9.5,-82 -11,-98 Q -11.5,-108 -11,-114 L -8,-110 Q -9,-100 -8.5,-88 Q -7,-62 0,-30 Z"
-          fill="url(#leafFront)" stroke="#5FA05F" stroke-width="1.2" filter="url(#leafShadow)" transform="rotate(25)">
-      <animate attributeName="opacity" values="1;0.96;1" dur="2.5s" repeatCount="indefinite"/>
-    </path>
-
-    <!-- 右前方の葉 -->
-    <path d="M 0,-18 Q 5,-42 8,-66 Q 9.5,-82 11,-98 Q 11.5,-108 11,-114 L 8,-110 Q 9,-100 8.5,-88 Q 7,-62 0,-30 Z"
-          fill="url(#leafFront)" stroke="#5FA05F" stroke-width="1.2" filter="url(#leafShadow)" transform="rotate(-25)">
-      <animate attributeName="opacity" values="1;0.96;1" dur="2.3s" repeatCount="indefinite"/>
-    </path>
-
-    <!-- 中央前方の葉（メイン） -->
-    <path d="M 0,-20 Q -1,-46 -1,-72 Q -1,-90 -1,-108 Q -1,-118 0,-124 L 1,-124 Q 2,-118 2,-108 Q 2,-90 2,-72 Q 2,-46 0,-28 Z"
-          fill="url(#leafFront)" stroke="#5FA05F" stroke-width="1.2" filter="url(#leafShadow)" transform="rotate(-45)">
-      <animate attributeName="opacity" values="1;0.97;1" dur="2.2s" repeatCount="indefinite"/>
-    </path>
-
-    <path d="M 0,-20 Q -1,-46 -1,-72 Q -1,-90 -1,-108 Q -1,-118 0,-124 L 1,-124 Q 2,-118 2,-108 Q 2,-90 2,-72 Q 2,-46 0,-28 Z"
-          fill="url(#leafFront)" stroke="#5FA05F" stroke-width="1.2" filter="url(#leafShadow)" transform="rotate(45)">
-      <animate attributeName="opacity" values="1;0.97;1" dur="2.4s" repeatCount="indefinite"/>
-    </path>
-  </g>
-
-  <!-- トゲの詳細 - 手前の葉にのみ -->
-  <g transform="translate(100, 105)" opacity="0.85">
-    <!-- 左前方の葉のトゲ -->
-    <g transform="rotate(25)">
-      <line x1="-5" y1="-35" x2="-7.5" y2="-36" stroke="#D0F0D0" stroke-width="1.2" stroke-linecap="round" opacity="0.9"/>
-      <line x1="-6" y1="-50" x2="-9" y2="-52" stroke="#D0F0D0" stroke-width="1.2" stroke-linecap="round" opacity="0.9"/>
-      <line x1="-7" y1="-65" x2="-10.5" y2="-68" stroke="#D0F0D0" stroke-width="1.2" stroke-linecap="round" opacity="0.9"/>
-      <line x1="-8" y1="-80" x2="-12" y2="-84" stroke="#D0F0D0" stroke-width="1.2" stroke-linecap="round" opacity="0.9"/>
-      <line x1="-9" y1="-95" x2="-13.5" y2="-100" stroke="#E8F8E8" stroke-width="1.2" stroke-linecap="round" opacity="0.95"/>
+      <ellipse cx="0" cy="-42" rx="6" ry="26" fill="url(#leafBack)" stroke="#356535" stroke-width="0.8"
+               filter="url(#leafShadow)" transform="rotate(-70) scale(0.8, 0.65)"/>
     </g>
 
-    <!-- 右前方の葉のトゲ -->
-    <g transform="rotate(-25)">
-      <line x1="5" y1="-35" x2="7.5" y2="-36" stroke="#D0F0D0" stroke-width="1.2" stroke-linecap="round" opacity="0.9"/>
-      <line x1="6" y1="-50" x2="9" y2="-52" stroke="#D0F0D0" stroke-width="1.2" stroke-linecap="round" opacity="0.9"/>
-      <line x1="7" y1="-65" x2="10.5" y2="-68" stroke="#D0F0D0" stroke-width="1.2" stroke-linecap="round" opacity="0.9"/>
-      <line x1="8" y1="-80" x2="12" y2="-84" stroke="#D0F0D0" stroke-width="1.2" stroke-linecap="round" opacity="0.9"/>
-      <line x1="9" y1="-95" x2="13.5" y2="-100" stroke="#E8F8E8" stroke-width="1.2" stroke-linecap="round" opacity="0.95"/>
+    <!-- 中間の葉（中央部） -->
+    <g opacity="0.9">
+      <!-- 左中間 -->
+      <ellipse cx="0" cy="-35" rx="10" ry="38" fill="url(#leafMid)" stroke="#4A8A4A" stroke-width="1"
+               filter="url(#leafShadow)" transform="rotate(85) scale(1, 0.85)">
+        <animate attributeName="opacity" values="0.9;0.95;0.9" dur="2.8s" repeatCount="indefinite"/>
+      </ellipse>
+
+      <ellipse cx="0" cy="-35" rx="10" ry="38" fill="url(#leafMid)" stroke="#4A8A4A" stroke-width="1"
+               filter="url(#leafShadow)" transform="rotate(60) scale(0.95, 0.8)"/>
+
+      <ellipse cx="0" cy="-35" rx="10" ry="38" fill="url(#leafMid)" stroke="#4A8A4A" stroke-width="1"
+               filter="url(#leafShadow)" transform="rotate(110) scale(0.95, 0.8)"/>
+
+      <!-- 右中間 -->
+      <ellipse cx="0" cy="-35" rx="10" ry="38" fill="url(#leafMid)" stroke="#4A8A4A" stroke-width="1"
+               filter="url(#leafShadow)" transform="rotate(-85) scale(1, 0.85)">
+        <animate attributeName="opacity" values="0.9;0.95;0.9" dur="3s" repeatCount="indefinite"/>
+      </ellipse>
+
+      <ellipse cx="0" cy="-35" rx="10" ry="38" fill="url(#leafMid)" stroke="#4A8A4A" stroke-width="1"
+               filter="url(#leafShadow)" transform="rotate(-60) scale(0.95, 0.8)"/>
+
+      <ellipse cx="0" cy="-35" rx="10" ry="38" fill="url(#leafMid)" stroke="#4A8A4A" stroke-width="1"
+               filter="url(#leafShadow)" transform="rotate(-110) scale(0.95, 0.8)"/>
+
+      <!-- 上中間 -->
+      <ellipse cx="0" cy="-38" rx="9" ry="35" fill="url(#leafMid)" stroke="#4A8A4A" stroke-width="1"
+               filter="url(#leafShadow)" transform="rotate(25) scale(0.9, 0.75)"/>
+
+      <ellipse cx="0" cy="-38" rx="9" ry="35" fill="url(#leafMid)" stroke="#4A8A4A" stroke-width="1"
+               filter="url(#leafShadow)" transform="rotate(-25) scale(0.9, 0.75)"/>
     </g>
 
-    <!-- 中央左の葉のトゲ -->
-    <g transform="rotate(-45)">
-      <line x1="-1" y1="-45" x2="-2.5" y2="-47" stroke="#D0F0D0" stroke-width="1" stroke-linecap="round" opacity="0.9"/>
-      <line x1="-1" y1="-65" x2="-2.5" y2="-68" stroke="#D0F0D0" stroke-width="1" stroke-linecap="round" opacity="0.9"/>
-      <line x1="-1" y1="-85" x2="-2.5" y2="-89" stroke="#D0F0D0" stroke-width="1" stroke-linecap="round" opacity="0.9"/>
-      <line x1="-1" y1="-105" x2="-2.5" y2="-110" stroke="#E8F8E8" stroke-width="1" stroke-linecap="round" opacity="0.95"/>
-      <line x1="1" y1="-45" x2="2.5" y2="-47" stroke="#D0F0D0" stroke-width="1" stroke-linecap="round" opacity="0.9"/>
-      <line x1="1" y1="-65" x2="2.5" y2="-68" stroke="#D0F0D0" stroke-width="1" stroke-linecap="round" opacity="0.9"/>
-      <line x1="1" y1="-85" x2="2.5" y2="-89" stroke="#D0F0D0" stroke-width="1" stroke-linecap="round" opacity="0.9"/>
-      <line x1="1" y1="-105" x2="2.5" y2="-110" stroke="#E8F8E8" stroke-width="1" stroke-linecap="round" opacity="0.95"/>
+    <!-- 手前の葉（下部・大きく・明るく） -->
+    <g>
+      <!-- 手前左 -->
+      <ellipse cx="0" cy="-20" rx="13" ry="48" fill="url(#leafFront)" stroke="#5FA05F" stroke-width="1.2"
+               filter="url(#leafShadow)" transform="rotate(135) scale(1.15, 1.1)">
+        <animate attributeName="opacity" values="1;0.96;1" dur="2.5s" repeatCount="indefinite"/>
+      </ellipse>
+
+      <ellipse cx="0" cy="-22" rx="12" ry="46" fill="url(#leafFront)" stroke="#5FA05F" stroke-width="1.2"
+               filter="url(#leafShadow)" transform="rotate(160) scale(1.1, 1.05)"/>
+
+      <ellipse cx="0" cy="-22" rx="12" ry="46" fill="url(#leafFront)" stroke="#5FA05F" stroke-width="1.2"
+               filter="url(#leafShadow)" transform="rotate(110) scale(1.1, 1.05)"/>
+
+      <!-- 手前右 -->
+      <ellipse cx="0" cy="-20" rx="13" ry="48" fill="url(#leafFront)" stroke="#5FA05F" stroke-width="1.2"
+               filter="url(#leafShadow)" transform="rotate(-135) scale(1.15, 1.1)">
+        <animate attributeName="opacity" values="1;0.96;1" dur="2.7s" repeatCount="indefinite"/>
+      </ellipse>
+
+      <ellipse cx="0" cy="-22" rx="12" ry="46" fill="url(#leafFront)" stroke="#5FA05F" stroke-width="1.2"
+               filter="url(#leafShadow)" transform="rotate(-160) scale(1.1, 1.05)"/>
+
+      <ellipse cx="0" cy="-22" rx="12" ry="46" fill="url(#leafFront)" stroke="#5FA05F" stroke-width="1.2"
+               filter="url(#leafShadow)" transform="rotate(-110) scale(1.1, 1.05)"/>
+
+      <!-- 手前中央下 -->
+      <ellipse cx="0" cy="-18" rx="14" ry="50" fill="url(#leafFront)" stroke="#5FA05F" stroke-width="1.2"
+               filter="url(#leafShadow)" transform="rotate(180) scale(1.2, 1.15)">
+        <animate attributeName="opacity" values="1;0.97;1" dur="2.3s" repeatCount="indefinite"/>
+      </ellipse>
     </g>
 
-    <!-- 中央右の葉のトゲ -->
-    <g transform="rotate(45)">
-      <line x1="-1" y1="-45" x2="-2.5" y2="-47" stroke="#D0F0D0" stroke-width="1" stroke-linecap="round" opacity="0.9"/>
-      <line x1="-1" y1="-65" x2="-2.5" y2="-68" stroke="#D0F0D0" stroke-width="1" stroke-linecap="round" opacity="0.9"/>
-      <line x1="-1" y1="-85" x2="-2.5" y2="-89" stroke="#D0F0D0" stroke-width="1" stroke-linecap="round" opacity="0.9"/>
-      <line x1="-1" y1="-105" x2="-2.5" y2="-110" stroke="#E8F8E8" stroke-width="1" stroke-linecap="round" opacity="0.95"/>
-      <line x1="1" y1="-45" x2="2.5" y2="-47" stroke="#D0F0D0" stroke-width="1" stroke-linecap="round" opacity="0.9"/>
-      <line x1="1" y1="-65" x2="2.5" y2="-68" stroke="#D0F0D0" stroke-width="1" stroke-linecap="round" opacity="0.9"/>
-      <line x1="1" y1="-85" x2="2.5" y2="-89" stroke="#D0F0D0" stroke-width="1" stroke-linecap="round" opacity="0.9"/>
-      <line x1="1" y1="-105" x2="2.5" y2="-110" stroke="#E8F8E8" stroke-width="1" stroke-linecap="round" opacity="0.95"/>
-    </g>
-  </g>
+    <!-- トゲの詳細（手前の葉のみ） -->
+    <g opacity="0.8">
+      <!-- 手前左のトゲ -->
+      <g transform="rotate(135) scale(1.15, 1.1)">
+        <line x1="-9" y1="-40" x2="-13" y2="-44" stroke="#E0F8E0" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="-10" y1="-55" x2="-15" y2="-60" stroke="#F0FFF0" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="9" y1="-40" x2="13" y2="-44" stroke="#E0F8E0" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="10" y1="-55" x2="15" y2="-60" stroke="#F0FFF0" stroke-width="1.8" stroke-linecap="round"/>
+      </g>
 
-  <!-- 中心部の詳細 -->
-  <g transform="translate(100, 105)">
+      <!-- 手前右のトゲ -->
+      <g transform="rotate(-135) scale(1.15, 1.1)">
+        <line x1="-9" y1="-40" x2="-13" y2="-44" stroke="#E0F8E0" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="-10" y1="-55" x2="-15" y2="-60" stroke="#F0FFF0" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="9" y1="-40" x2="13" y2="-44" stroke="#E0F8E0" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="10" y1="-55" x2="15" y2="-60" stroke="#F0FFF0" stroke-width="1.8" stroke-linecap="round"/>
+      </g>
+
+      <!-- 手前中央下のトゲ -->
+      <g transform="rotate(180) scale(1.2, 1.15)">
+        <line x1="-11" y1="-38" x2="-16" y2="-42" stroke="#E0F8E0" stroke-width="2" stroke-linecap="round"/>
+        <line x1="-12" y1="-58" x2="-18" y2="-64" stroke="#F0FFF0" stroke-width="2" stroke-linecap="round"/>
+        <line x1="11" y1="-38" x2="16" y2="-42" stroke="#E0F8E0" stroke-width="2" stroke-linecap="round"/>
+        <line x1="12" y1="-58" x2="18" y2="-64" stroke="#F0FFF0" stroke-width="2" stroke-linecap="round"/>
+        <line x1="0" y1="-65" x2="0" y2="-72" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+      </g>
+    </g>
+
+    <!-- 中心部（少し上にオフセット） -->
+    <circle cy="-5" r="18" fill="url(#center)" opacity="0.95"/>
+
     <!-- 中心のハイライト -->
-    <circle r="10" fill="#A8D8A8" opacity="0.7">
-      <animate attributeName="r" values="10;12;10" dur="3s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0.7;0.85;0.7" dur="3s" repeatCount="indefinite"/>
+    <circle cy="-5" r="12" fill="#B8E6B8" opacity="0.75">
+      <animate attributeName="r" values="12;14;12" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.75;0.9;0.75" dur="3s" repeatCount="indefinite"/>
     </circle>
 
     <!-- 最も明るい中心点 -->
-    <circle cx="-2" cy="-2" r="5" fill="#C8F0C8" opacity="0.9"/>
+    <circle cx="-4" cy="-9" r="6" fill="#D8F8D8" opacity="0.9"/>
 
     <!-- 輝点 -->
-    <circle cx="-3" cy="-3" r="2" fill="#E8F8E8" opacity="0.95">
+    <circle cx="-5" cy="-10" r="3" fill="#F0FFF0" opacity="0.95">
       <animate attributeName="opacity" values="0.95;0.7;0.95" dur="2s" repeatCount="indefinite"/>
     </circle>
   </g>
