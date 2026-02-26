@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>🍎 フルーツキャッチ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- スタート画面 -->
+        <div id="startScreen" class="screen">
+            <div class="title-area">
+                <h1 class="game-title">🍎 フルーツキャッチ</h1>
+                <p class="game-subtitle">落ちてくるフルーツをキャッチしよう！</p>
+            </div>
+            <div class="menu-area">
+                <button class="btn btn-start" id="startBtn">
+                    <span class="btn-icon">🎮</span>
+                    スタート
+                </button>
+                <div class="high-score">
+                    <span class="label">ハイスコア:</span>
+                    <span class="value" id="highScoreDisplay">0</span>
+                </div>
+            </div>
+            <div class="instructions">
+                <h3>遊び方</h3>
+                <ul>
+                    <li>📱 画面をタップ/ドラッグしてバスケットを移動</li>
+                    <li>🍎 フルーツをキャッチしてポイントGET</li>
+                    <li>💣 爆弾を避けよう！</li>
+                    <li>⏱️ 時間が経つほどスピードアップ</li>
+                </ul>
+            </div>
+            <a href="../index.html" class="back-link">← ガントチャートツールへ戻る</a>
+        </div>
+
+        <!-- ゲーム画面 -->
+        <div id="gameScreen" class="screen" style="display: none;">
+            <div class="game-header">
+                <div class="score-display">
+                    <span class="label">スコア:</span>
+                    <span class="value" id="scoreDisplay">0</span>
+                </div>
+                <div class="lives-display">
+                    <span class="label">❤️</span>
+                    <span class="value" id="livesDisplay">3</span>
+                </div>
+                <button class="btn-pause" id="pauseBtn">⏸</button>
+            </div>
+
+            <canvas id="gameCanvas"></canvas>
+
+            <div class="game-info">
+                <p>タップ/ドラッグで移動</p>
+            </div>
+        </div>
+
+        <!-- ゲームオーバー画面 -->
+        <div id="gameOverScreen" class="screen" style="display: none;">
+            <div class="game-over-content">
+                <h1 class="game-over-title">ゲームオーバー</h1>
+                <div class="final-score-area">
+                    <p class="label">最終スコア</p>
+                    <p class="score" id="finalScore">0</p>
+                </div>
+                <div class="high-score-area" id="newHighScoreArea" style="display: none;">
+                    <p class="new-high-score">🎉 新記録！ 🎉</p>
+                </div>
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-label">キャッチ数:</span>
+                        <span class="stat-value" id="catchCount">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">最高コンボ:</span>
+                        <span class="stat-value" id="maxCombo">0</span>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-restart" id="restartBtn">
+                        <span class="btn-icon">🔄</span>
+                        もう一度
+                    </button>
+                    <button class="btn btn-menu" id="menuBtn">
+                        <span class="btn-icon">🏠</span>
+                        メニュー
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ポーズ画面 -->
+        <div id="pauseScreen" class="screen overlay" style="display: none;">
+            <div class="pause-content">
+                <h2>⏸ ポーズ中</h2>
+                <button class="btn btn-resume" id="resumeBtn">
+                    <span class="btn-icon">▶️</span>
+                    再開
+                </button>
+                <button class="btn btn-menu-pause" id="menuBtnPause">
+                    <span class="btn-icon">🏠</span>
+                    メニューに戻る
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

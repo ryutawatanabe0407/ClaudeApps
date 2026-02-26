@@ -1,6 +1,8 @@
-# ClaudeApps
+# ClaudeApps 🎯
 
-## ガントチャートツール
+複数のWebアプリケーションを収録したプロジェクトです。
+
+## 📊 ガントチャートツール
 
 プロジェクトのタスクを視覚的に管理できるWebアプリケーションです。
 
@@ -20,17 +22,45 @@
 - Vanilla JavaScript
 - SheetJS (xlsx)
 
-### デモ
+## 🎮 フルーツキャッチゲーム
 
-🌐 公開URL: https://ryutawatanabe0407.github.io/ClaudeApps/
+落ちてくるフルーツをキャッチする楽しいスマホゲームです。
 
-### ローカルでの実行
+### 機能
+
+- 🍎 多彩なフルーツをキャッチ
+- 💣 爆弾を避けるアクション要素
+- 📱 タッチ操作に完全対応
+- ⚡ 時間経過でスピードアップ
+- 🏆 コンボシステムでハイスコアを狙おう
+- 💾 ローカルストレージでハイスコア保存
+- 📊 詳細な統計表示
+
+### 技術スタック
+
+- HTML5 Canvas
+- CSS3 (アニメーション)
+- Vanilla JavaScript
+- タッチイベント API
+
+## 🌐 デモ
+
+### ガントチャートツール
+🔗 https://ryutawatanabe0407.github.io/ClaudeApps/
+
+### フルーツキャッチゲーム
+🔗 https://ryutawatanabe0407.github.io/ClaudeApps/game/
+
+## 🚀 ローカルでの実行
 
 ```bash
-# ブラウザで index.html を開く
+# ガントチャートツール
 open index.html
+
+# フルーツキャッチゲーム
+open game/index.html
 ```
 
-### ライセンス
+## 📝 ライセンス
 
 MIT License
