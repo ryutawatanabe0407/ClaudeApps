@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌵 ディッキア プレビュー</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 40px;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h1 {
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 40px;
+        }
+
+        .container {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .preview {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .preview h2 {
+            margin-top: 0;
+            color: #667eea;
+            font-size: 1.2em;
+        }
+
+        .preview-box {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+        }
+
+        img {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .description {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.6;
+            max-width: 300px;
+            margin-top: 15px;
+        }
+
+        .features {
+            text-align: left;
+            margin-top: 20px;
+            color: #555;
+            font-size: 0.85em;
+        }
+
+        .features li {
+            margin: 8px 0;
+        }
+
+        .back-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+        }
+    </style>
+</head>
+<body>
+    <a href="../index.html" class="back-link">← ゲームに戻る</a>
+
+    <h1>🌵 新しいディッキア デザイン</h1>
+
+    <div class="container">
+        <!-- 小サイズ -->
+        <div class="preview">
+            <h2>小サイズ (50x50)</h2>
+            <div class="preview-box">
+                <img src="dyckia.svg" width="50" height="50" alt="ディッキア小">
+            </div>
+            <p class="description">ゲーム内の落下オブジェクトとして表示されるサイズ</p>
+        </div>
+
+        <!-- 中サイズ -->
+        <div class="preview">
+            <h2>中サイズ (100x100)</h2>
+            <div class="preview-box">
+                <img src="dyckia.svg" width="100" height="100" alt="ディッキア中">
+            </div>
+            <p class="description">バランスの取れた標準サイズ</p>
+        </div>
+
+        <!-- 大サイズ -->
+        <div class="preview">
+            <h2>大サイズ (200x200)</h2>
+            <div class="preview-box">
+                <img src="dyckia.svg" width="200" height="200" alt="ディッキア大">
+            </div>
+            <p class="description">詳細がよく見えるフルサイズ</p>
+        </div>
+    </div>
+
+    <div class="preview" style="margin-top: 40px; max-width: 600px;">
+        <h2>✨ デザインの特徴</h2>
+        <ul class="features">
+            <li>🎨 <strong>鮮やかな緑色</strong>：複数段階のグラデーションで自然な色合い</li>
+            <li>🔺 <strong>上方斜視図</strong>：上から斜めに見た立体的な視点</li>
+            <li>⚡ <strong>トゲの詳細</strong>：葉の縁に白いトゲのハイライト</li>
+            <li>🌟 <strong>中心の輝き</strong>：生命力を感じる中心部の光</li>
+            <li>💫 <strong>呼吸アニメーション</strong>：微妙に動いて生き生きとした印象</li>
+            <li>🎭 <strong>遠近感</strong>：後ろの葉は暗く小さく、手前の葉は明るく大きく</li>
+            <li>🌈 <strong>多層構造</strong>：奥・中間・手前の3層で深みを表現</li>
+            <li>✨ <strong>影とフィルター</strong>：SVGフィルターで自然な立体感</li>
+        </ul>
+    </div>
+</body>
+</html>
