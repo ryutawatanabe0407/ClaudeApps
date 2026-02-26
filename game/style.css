@@ -164,6 +164,7 @@ body {
 #gameScreen {
     padding: 10px;
     justify-content: flex-start;
+    gap: 10px;
 }
 
 .game-header {
@@ -209,7 +210,8 @@ body {
 
 #gameCanvas {
     width: 100%;
-    flex: 1;
+    height: 450px;
+    max-height: 60vh;
     background: rgba(255, 255, 255, 0.95);
     border-radius: 15px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);

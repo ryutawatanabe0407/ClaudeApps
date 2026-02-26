@@ -2,7 +2,7 @@
 const CONFIG = {
     BASKET_WIDTH: 80,
     BASKET_HEIGHT: 60,
-    FRUIT_SIZE: 40,
+    PLANT_SIZE: 50,
     BOMB_SIZE: 35,
     INITIAL_FALL_SPEED: 2,
     SPEED_INCREASE_RATE: 0.0005,
@@ -12,8 +12,8 @@ const CONFIG = {
     COMBO_BONUS: 5
 };
 
-// フルーツの種類
-const FRUITS = ['🍎', '🍊', '🍋', '🍌', '🍇', '🍓', '🍑', '🍒', '🥝', '🍍'];
+// ディッキア画像のパス
+const DYCKIA_IMAGE_PATH = 'assets/dyckia.png';
 
 // ゲーム状態
 const GAME_STATE = {
@@ -51,6 +51,18 @@ class Game {
         this.touchX = null;
         this.mouseX = null;
 
+        // ディッキア画像をロード
+        this.dyckiaImage = new Image();
+        this.dyckiaImage.src = DYCKIA_IMAGE_PATH;
+        this.imageLoaded = false;
+        this.dyckiaImage.onload = () => {
+            this.imageLoaded = true;
+        };
+        this.dyckiaImage.onerror = () => {
+            console.log('画像の読み込みに失敗しました。絵文字を使用します。');
+            this.imageLoaded = false;
+        };
+
         this.setupCanvas();
         this.setupEventListeners();
         this.showScreen('startScreen');
@@ -59,10 +71,10 @@ class Game {
 
     setupCanvas() {
         const resizeCanvas = () => {
-            const container = this.canvas.parentElement;
-            const rect = container.getBoundingClientRect();
-            this.canvas.width = rect.width - 20;
-            this.canvas.height = rect.height - 140;
+            const rect = this.canvas.getBoundingClientRect();
+            // iPhoneに最適化：固定の高さと幅の比率を使用
+            this.canvas.width = rect.width;
+            this.canvas.height = rect.height;
             this.basket.y = this.canvas.height - CONFIG.BASKET_HEIGHT - 10;
             this.basket.x = this.canvas.width / 2 - CONFIG.BASKET_WIDTH / 2;
         };
@@ -211,15 +223,15 @@ class Game {
 
     spawnFallingObject() {
         const isBomb = Math.random() < CONFIG.BOMB_RATE;
-        const size = isBomb ? CONFIG.BOMB_SIZE : CONFIG.FRUIT_SIZE;
+        const size = isBomb ? CONFIG.BOMB_SIZE : CONFIG.PLANT_SIZE;
 
         const obj = {
             x: Math.random() * (this.canvas.width - size),
             y: -size,
             size: size,
             speed: CONFIG.INITIAL_FALL_SPEED + (this.frameCount * CONFIG.SPEED_INCREASE_RATE),
-            type: isBomb ? 'bomb' : 'fruit',
-            emoji: isBomb ? '💣' : FRUITS[Math.floor(Math.random() * FRUITS.length)]
+            type: isBomb ? 'bomb' : 'plant',
+            useImage: !isBomb && this.imageLoaded
         };
 
         this.fallingObjects.push(obj);
@@ -262,7 +274,7 @@ class Game {
 
             // 衝突判定
             if (this.checkCollision(obj)) {
-                if (obj.type === 'fruit') {
+                if (obj.type === 'plant') {
                     this.currentCombo++;
                     const comboBonus = this.currentCombo > 1 ?
                                       (this.currentCombo - 1) * CONFIG.COMBO_BONUS : 0;
@@ -287,7 +299,7 @@ class Game {
             }
             // 画面外に出たら削除
             else if (obj.y > this.canvas.height) {
-                if (obj.type === 'fruit') {
+                if (obj.type === 'plant') {
                     this.currentCombo = 0;
                 }
                 this.fallingObjects.splice(i, 1);
@@ -349,9 +361,15 @@ class Game {
                          this.basket.y + this.basket.height - 10);
 
         // 落ちてくるオブジェクト
-        this.ctx.font = `${CONFIG.FRUIT_SIZE}px Arial`;
         this.fallingObjects.forEach(obj => {
-            this.ctx.fillText(obj.emoji, obj.x, obj.y + obj.size);
+            if (obj.useImage && this.imageLoaded) {
+                // ディッキア画像を描画
+                this.ctx.drawImage(this.dyckiaImage, obj.x, obj.y, obj.size, obj.size);
+            } else {
+                // 爆弾は絵文字で描画
+                this.ctx.font = `${obj.size}px Arial`;
+                this.ctx.fillText(obj.type === 'bomb' ? '💣' : '🌵', obj.x, obj.y + obj.size);
+            }
         });
 
         // パーティクル
