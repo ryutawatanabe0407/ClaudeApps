@@ -1,15 +1,14 @@
 // ゲーム設定
 const CONFIG = {
-    BASKET_WIDTH: 80,
-    BASKET_HEIGHT: 60,
-    PLANT_SIZE: 50,
-    BOMB_SIZE: 35,
-    INITIAL_FALL_SPEED: 2,
-    SPEED_INCREASE_RATE: 0.0005,
-    SPAWN_RATE: 60,
-    BOMB_RATE: 0.15,
-    INITIAL_LIVES: 3,
-    COMBO_BONUS: 5
+    GAME_TIME: 60, // 60秒
+    MAX_AMMO: 30,
+    RELOAD_TIME: 2000, // 2秒
+    TARGET_SIZE: 80,
+    TARGET_SPAWN_INTERVAL: 1500, // 1.5秒
+    TARGET_LIFETIME: 2500, // ターゲットが表示される時間（2.5秒）
+    COMBO_TIMEOUT: 1000, // コンボ継続時間（1秒）
+    HIT_SCORE: 100,
+    COMBO_MULTIPLIER: 1.5
 };
 
 // ディッキア画像のパス
@@ -19,85 +18,60 @@ const DYCKIA_IMAGE_PATH = 'assets/dyckia.svg';
 const GAME_STATE = {
     START: 'start',
     PLAYING: 'playing',
-    PAUSED: 'paused',
     GAME_OVER: 'gameOver'
 };
 
-// ゲームクラス
-class Game {
+// ディッキアFPSゲームクラス
+class DyckiaFPS {
     constructor() {
         this.canvas = document.getElementById('gameCanvas');
         this.ctx = this.canvas.getContext('2d');
 
         this.state = GAME_STATE.START;
         this.score = 0;
-        this.lives = CONFIG.INITIAL_LIVES;
-        this.highScore = parseInt(localStorage.getItem('fruitCatchHighScore')) || 0;
-        this.frameCount = 0;
-        this.catchCount = 0;
-        this.maxCombo = 0;
+        this.timeLeft = CONFIG.GAME_TIME;
+        this.ammo = CONFIG.MAX_AMMO;
+        this.maxAmmo = CONFIG.MAX_AMMO;
+        this.isReloading = false;
+        this.highScore = parseInt(localStorage.getItem('dyckiaFPSHighScore')) || 0;
+
+        this.hitCount = 0;
+        this.shotsFired = 0;
         this.currentCombo = 0;
+        this.maxCombo = 0;
+        this.lastHitTime = 0;
 
-        this.basket = {
-            x: 0,
-            y: 0,
-            width: CONFIG.BASKET_WIDTH,
-            height: CONFIG.BASKET_HEIGHT
-        };
-
-        this.fallingObjects = [];
+        this.targets = [];
         this.particles = [];
 
-        this.touchX = null;
-        this.mouseX = null;
-
-        // ディッキア画像をロード
+        // ディッキア画像の読み込み
         this.dyckiaImage = new Image();
         this.dyckiaImage.src = DYCKIA_IMAGE_PATH;
-        this.imageLoaded = false;
-        this.dyckiaImage.onload = () => {
-            this.imageLoaded = true;
-        };
         this.dyckiaImage.onerror = () => {
-            console.log('画像の読み込みに失敗しました。絵文字を使用します。');
-            this.imageLoaded = false;
+            console.error('Failed to load dyckia image');
         };
 
         this.setupCanvas();
         this.setupEventListeners();
-        this.showScreen('startScreen');
         this.updateHighScoreDisplay();
-    }
 
-    resizeCanvas() {
-        const rect = this.canvas.getBoundingClientRect();
-        // iPhoneに最適化：固定の高さと幅の比率を使用
-        this.canvas.width = rect.width;
-        this.canvas.height = rect.height;
-        console.log('📐 Canvas resized:', this.canvas.width, 'x', this.canvas.height);
-        this.basket.y = this.canvas.height - CONFIG.BASKET_HEIGHT - 10;
-        this.basket.x = this.canvas.width / 2 - CONFIG.BASKET_WIDTH / 2;
+        this.lastSpawnTime = 0;
+        this.gameTimer = null;
     }
 
     setupCanvas() {
-        this.resizeCanvas();
-        window.addEventListener('resize', () => this.resizeCanvas());
+        const resizeCanvas = () => {
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
+        };
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
     }
 
     setupEventListeners() {
         // スタートボタン
         document.getElementById('startBtn').addEventListener('click', () => {
             this.startGame();
-        });
-
-        // ポーズボタン
-        document.getElementById('pauseBtn').addEventListener('click', () => {
-            this.pauseGame();
-        });
-
-        // 再開ボタン
-        document.getElementById('resumeBtn').addEventListener('click', () => {
-            this.resumeGame();
         });
 
         // リスタートボタン
@@ -107,315 +81,379 @@ class Game {
 
         // メニューボタン
         document.getElementById('menuBtn').addEventListener('click', () => {
-            this.showScreen('startScreen');
+            this.showStartScreen();
         });
 
-        document.getElementById('menuBtnPause').addEventListener('click', () => {
-            this.state = GAME_STATE.START;
-            this.showScreen('startScreen');
-        });
-
-        // タッチ操作
-        this.canvas.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            if (this.state === GAME_STATE.PLAYING) {
-                this.touchX = e.touches[0].clientX;
+        // 射撃（クリック）
+        this.canvas.addEventListener('click', (e) => {
+            if (this.state === GAME_STATE.PLAYING && !this.isReloading) {
+                this.shoot(e.clientX, e.clientY);
             }
         });
 
-        this.canvas.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-            if (this.state === GAME_STATE.PLAYING && e.touches[0]) {
-                this.touchX = e.touches[0].clientX;
-                this.updateBasketPosition(this.touchX);
+        // リロード（Rキー）
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'r' || e.key === 'R') {
+                if (this.state === GAME_STATE.PLAYING && !this.isReloading && this.ammo < this.maxAmmo) {
+                    this.reload();
+                }
             }
         });
-
-        this.canvas.addEventListener('touchend', () => {
-            this.touchX = null;
-        });
-
-        // マウス操作
-        this.canvas.addEventListener('mousemove', (e) => {
-            if (this.state === GAME_STATE.PLAYING) {
-                const rect = this.canvas.getBoundingClientRect();
-                this.mouseX = e.clientX - rect.left;
-                this.updateBasketPosition(e.clientX);
-            }
-        });
-    }
-
-    updateBasketPosition(clientX) {
-        const rect = this.canvas.getBoundingClientRect();
-        const x = clientX - rect.left;
-        this.basket.x = Math.max(0, Math.min(x - CONFIG.BASKET_WIDTH / 2,
-                                             this.canvas.width - CONFIG.BASKET_WIDTH));
-    }
-
-    showScreen(screenId) {
-        const screens = ['startScreen', 'gameScreen', 'gameOverScreen', 'pauseScreen'];
-        screens.forEach(id => {
-            document.getElementById(id).style.display = 'none';
-        });
-        document.getElementById(screenId).style.display = 'flex';
     }
 
     startGame() {
         this.state = GAME_STATE.PLAYING;
         this.score = 0;
-        this.lives = CONFIG.INITIAL_LIVES;
-        this.frameCount = 0;
-        this.catchCount = 0;
+        this.timeLeft = CONFIG.GAME_TIME;
+        this.ammo = CONFIG.MAX_AMMO;
+        this.isReloading = false;
+        this.hitCount = 0;
+        this.shotsFired = 0;
         this.currentCombo = 0;
-        this.fallingObjects = [];
+        this.maxCombo = 0;
+        this.lastHitTime = 0;
+        this.targets = [];
         this.particles = [];
+        this.lastSpawnTime = Date.now();
 
-        this.showScreen('gameScreen');
+        document.getElementById('startScreen').style.display = 'none';
+        document.getElementById('gameOverScreen').style.display = 'none';
+        document.getElementById('gameScreen').style.display = 'block';
 
-        // 画面表示後、次のフレームでキャンバスサイズを再計算
-        // （ブラウザがレイアウトを更新してから実行）
-        requestAnimationFrame(() => {
-            this.resizeCanvas();
-            this.basket.x = this.canvas.width / 2 - CONFIG.BASKET_WIDTH / 2;
-            console.log('🎮 Game started! Canvas size:', this.canvas.width, 'x', this.canvas.height);
+        this.updateUI();
+
+        // タイマー開始
+        this.gameTimer = setInterval(() => {
+            this.timeLeft--;
+            if (this.timeLeft <= 0) {
+                this.gameOver();
+            }
             this.updateUI();
-            this.gameLoop();
-        });
+        }, 1000);
+
+        // ゲームループ開始
+        this.gameLoop();
     }
 
-    pauseGame() {
-        if (this.state === GAME_STATE.PLAYING) {
-            this.state = GAME_STATE.PAUSED;
-            this.showScreen('pauseScreen');
+    gameLoop() {
+        if (this.state !== GAME_STATE.PLAYING) {
+            return;
+        }
+
+        const now = Date.now();
+
+        // ターゲット（ディッキア）のスポーン
+        if (now - this.lastSpawnTime > CONFIG.TARGET_SPAWN_INTERVAL) {
+            this.spawnTarget();
+            this.lastSpawnTime = now;
+        }
+
+        // コンボタイムアウト
+        if (now - this.lastHitTime > CONFIG.COMBO_TIMEOUT && this.currentCombo > 0) {
+            this.currentCombo = 0;
+            document.getElementById('comboDisplay').style.display = 'none';
+        }
+
+        // 描画
+        this.draw();
+
+        // 次のフレーム
+        requestAnimationFrame(() => this.gameLoop());
+    }
+
+    spawnTarget() {
+        const margin = CONFIG.TARGET_SIZE;
+        const target = {
+            x: margin + Math.random() * (this.canvas.width - margin * 2),
+            y: margin + Math.random() * (this.canvas.height - margin * 2),
+            size: CONFIG.TARGET_SIZE,
+            spawnTime: Date.now(),
+            scale: 0 // アニメーション用
+        };
+        this.targets.push(target);
+    }
+
+    shoot(x, y) {
+        if (this.ammo <= 0) {
+            return;
+        }
+
+        this.ammo--;
+        this.shotsFired++;
+        this.updateUI();
+
+        // ヒット判定
+        let hit = false;
+        for (let i = this.targets.length - 1; i >= 0; i--) {
+            const target = this.targets[i];
+            const distance = Math.sqrt(
+                Math.pow(x - target.x, 2) +
+                Math.pow(y - target.y, 2)
+            );
+
+            if (distance < target.size / 2) {
+                // ヒット！
+                hit = true;
+                this.onHit(target);
+                this.targets.splice(i, 1);
+                break;
+            }
+        }
+
+        if (!hit) {
+            // ミス
+            this.currentCombo = 0;
+            document.getElementById('comboDisplay').style.display = 'none';
         }
     }
 
-    resumeGame() {
-        if (this.state === GAME_STATE.PAUSED) {
-            this.state = GAME_STATE.PLAYING;
-            document.getElementById('pauseScreen').style.display = 'none';
-            this.gameLoop();
+    onHit(target) {
+        this.hitCount++;
+        this.currentCombo++;
+        this.lastHitTime = Date.now();
+
+        if (this.currentCombo > this.maxCombo) {
+            this.maxCombo = this.currentCombo;
+        }
+
+        // スコア計算
+        let points = CONFIG.HIT_SCORE;
+        if (this.currentCombo > 1) {
+            points = Math.floor(points * (1 + (this.currentCombo - 1) * CONFIG.COMBO_MULTIPLIER));
+        }
+        this.score += points;
+
+        // UI更新
+        this.updateUI();
+
+        // コンボ表示
+        if (this.currentCombo > 1) {
+            document.getElementById('comboDisplay').style.display = 'flex';
+            document.getElementById('comboValue').textContent = this.currentCombo;
+        }
+
+        // ヒットマーカー表示
+        this.showHitMarker();
+
+        // パーティクル生成
+        this.createParticles(target.x, target.y);
+    }
+
+    showHitMarker() {
+        const hitMarker = document.getElementById('hitMarker');
+        hitMarker.style.display = 'block';
+        setTimeout(() => {
+            hitMarker.style.display = 'none';
+        }, 200);
+    }
+
+    createParticles(x, y) {
+        const particleCount = 20;
+        for (let i = 0; i < particleCount; i++) {
+            const angle = (Math.PI * 2 * i) / particleCount;
+            const speed = 2 + Math.random() * 3;
+            this.particles.push({
+                x: x,
+                y: y,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                life: 1,
+                decay: 0.02,
+                size: 3 + Math.random() * 3,
+                color: `hsl(${120 + Math.random() * 60}, 100%, 50%)`
+            });
         }
     }
 
-    gameOver() {
-        this.state = GAME_STATE.GAME_OVER;
+    reload() {
+        this.isReloading = true;
+        document.getElementById('reloadDisplay').style.display = 'block';
 
-        // ハイスコア更新
-        if (this.score > this.highScore) {
-            this.highScore = this.score;
-            localStorage.setItem('fruitCatchHighScore', this.highScore);
-            document.getElementById('newHighScoreArea').style.display = 'block';
+        setTimeout(() => {
+            this.ammo = this.maxAmmo;
+            this.isReloading = false;
+            document.getElementById('reloadDisplay').style.display = 'none';
+            this.updateUI();
+        }, CONFIG.RELOAD_TIME);
+    }
+
+    draw() {
+        // 背景（グラデーション）
+        const gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
+        gradient.addColorStop(0, '#0a3d0a');
+        gradient.addColorStop(1, '#001a00');
+        this.ctx.fillStyle = gradient;
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // グリッド（FPS風）
+        this.drawGrid();
+
+        // ターゲット（ディッキア）を描画
+        const now = Date.now();
+        for (let i = this.targets.length - 1; i >= 0; i--) {
+            const target = this.targets[i];
+            const elapsed = now - target.spawnTime;
+
+            // アニメーション（出現）
+            if (target.scale < 1) {
+                target.scale = Math.min(1, elapsed / 200);
+            }
+
+            // タイムアウトチェック
+            if (elapsed > CONFIG.TARGET_LIFETIME) {
+                this.targets.splice(i, 1);
+                continue;
+            }
+
+            // 点滅エフェクト（タイムアウト前）
+            const timeLeft = CONFIG.TARGET_LIFETIME - elapsed;
+            if (timeLeft < 500) {
+                if (Math.floor(elapsed / 100) % 2 === 0) {
+                    continue; // 点滅
+                }
+            }
+
+            this.drawTarget(target);
+        }
+
+        // パーティクルを描画
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+            const p = this.particles[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            p.life -= p.decay;
+
+            if (p.life <= 0) {
+                this.particles.splice(i, 1);
+                continue;
+            }
+
+            this.ctx.globalAlpha = p.life;
+            this.ctx.fillStyle = p.color;
+            this.ctx.beginPath();
+            this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            this.ctx.fill();
+        }
+        this.ctx.globalAlpha = 1;
+    }
+
+    drawGrid() {
+        this.ctx.strokeStyle = 'rgba(0, 255, 0, 0.1)';
+        this.ctx.lineWidth = 1;
+
+        const gridSize = 50;
+
+        // 縦線
+        for (let x = 0; x < this.canvas.width; x += gridSize) {
+            this.ctx.beginPath();
+            this.ctx.moveTo(x, 0);
+            this.ctx.lineTo(x, this.canvas.height);
+            this.ctx.stroke();
+        }
+
+        // 横線
+        for (let y = 0; y < this.canvas.height; y += gridSize) {
+            this.ctx.beginPath();
+            this.ctx.moveTo(0, y);
+            this.ctx.lineTo(this.canvas.width, y);
+            this.ctx.stroke();
+        }
+    }
+
+    drawTarget(target) {
+        this.ctx.save();
+        this.ctx.translate(target.x, target.y);
+        this.ctx.scale(target.scale, target.scale);
+
+        // 影
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+        this.ctx.beginPath();
+        this.ctx.ellipse(0, 10, target.size * 0.4, target.size * 0.15, 0, 0, Math.PI * 2);
+        this.ctx.fill();
+
+        // ディッキア画像
+        if (this.dyckiaImage.complete) {
+            this.ctx.drawImage(
+                this.dyckiaImage,
+                -target.size / 2,
+                -target.size / 2,
+                target.size,
+                target.size
+            );
         } else {
-            document.getElementById('newHighScoreArea').style.display = 'none';
+            // フォールバック（円）
+            this.ctx.fillStyle = '#4CAF50';
+            this.ctx.beginPath();
+            this.ctx.arc(0, 0, target.size / 2, 0, Math.PI * 2);
+            this.ctx.fill();
+            this.ctx.fillStyle = '#fff';
+            this.ctx.font = '30px Arial';
+            this.ctx.textAlign = 'center';
+            this.ctx.textBaseline = 'middle';
+            this.ctx.fillText('🌵', 0, 0);
         }
 
-        // 統計表示
-        document.getElementById('finalScore').textContent = this.score;
-        document.getElementById('catchCount').textContent = this.catchCount;
-        document.getElementById('maxCombo').textContent = this.maxCombo;
+        // ターゲット枠（赤）
+        this.ctx.strokeStyle = '#ff0000';
+        this.ctx.lineWidth = 3;
+        this.ctx.setLineDash([5, 5]);
+        this.ctx.beginPath();
+        this.ctx.arc(0, 0, target.size / 2 + 5, 0, Math.PI * 2);
+        this.ctx.stroke();
+        this.ctx.setLineDash([]);
 
-        this.showScreen('gameOverScreen');
-        this.updateHighScoreDisplay();
+        this.ctx.restore();
+    }
+
+    updateUI() {
+        document.getElementById('scoreDisplay').textContent = this.score;
+        document.getElementById('timeDisplay').textContent = this.timeLeft;
+        document.getElementById('ammoDisplay').textContent = `${this.ammo}/${this.maxAmmo}`;
     }
 
     updateHighScoreDisplay() {
         document.getElementById('highScoreDisplay').textContent = this.highScore;
     }
 
-    updateUI() {
-        document.getElementById('scoreDisplay').textContent = this.score;
-        document.getElementById('livesDisplay').textContent = this.lives;
+    gameOver() {
+        this.state = GAME_STATE.GAME_OVER;
+        clearInterval(this.gameTimer);
+
+        // ハイスコア更新
+        if (this.score > this.highScore) {
+            this.highScore = this.score;
+            localStorage.setItem('dyckiaFPSHighScore', this.highScore);
+            document.getElementById('newHighScoreArea').style.display = 'block';
+        } else {
+            document.getElementById('newHighScoreArea').style.display = 'none';
+        }
+
+        // 命中率計算
+        const accuracy = this.shotsFired > 0
+            ? Math.round((this.hitCount / this.shotsFired) * 100)
+            : 0;
+
+        // 統計表示
+        document.getElementById('finalScore').textContent = this.score;
+        document.getElementById('hitCount').textContent = this.hitCount;
+        document.getElementById('maxCombo').textContent = this.maxCombo;
+        document.getElementById('accuracy').textContent = `${accuracy}%`;
+
+        // 画面切り替え
+        document.getElementById('gameScreen').style.display = 'none';
+        document.getElementById('gameOverScreen').style.display = 'flex';
     }
 
-    spawnFallingObject() {
-        const isBomb = Math.random() < CONFIG.BOMB_RATE;
-        const size = isBomb ? CONFIG.BOMB_SIZE : CONFIG.PLANT_SIZE;
-
-        const obj = {
-            x: Math.random() * (this.canvas.width - size),
-            y: -size,
-            size: size,
-            speed: CONFIG.INITIAL_FALL_SPEED + (this.frameCount * CONFIG.SPEED_INCREASE_RATE),
-            type: isBomb ? 'bomb' : 'plant',
-            useImage: !isBomb && this.imageLoaded
-        };
-
-        console.log('✨ Created object:', obj.type, 'at x:', obj.x, 'y:', obj.y, 'speed:', obj.speed);
-        this.fallingObjects.push(obj);
-    }
-
-    createParticles(x, y, color, count = 10) {
-        for (let i = 0; i < count; i++) {
-            this.particles.push({
-                x: x,
-                y: y,
-                vx: (Math.random() - 0.5) * 6,
-                vy: (Math.random() - 0.5) * 6,
-                life: 30,
-                color: color
-            });
-        }
-    }
-
-    checkCollision(obj) {
-        return obj.x < this.basket.x + this.basket.width &&
-               obj.x + obj.size > this.basket.x &&
-               obj.y < this.basket.y + this.basket.height &&
-               obj.y + obj.size > this.basket.y;
-    }
-
-    update() {
-        if (this.state !== GAME_STATE.PLAYING) return;
-
-        this.frameCount++;
-
-        // オブジェクト生成
-        if (this.frameCount % CONFIG.SPAWN_RATE === 1) {
-            console.log('🌵 Spawning object at frame:', this.frameCount);
-            this.spawnFallingObject();
-            console.log('📦 Total falling objects:', this.fallingObjects.length);
-        }
-
-        // オブジェクト更新
-        for (let i = this.fallingObjects.length - 1; i >= 0; i--) {
-            const obj = this.fallingObjects[i];
-            obj.y += obj.speed;
-
-            // 衝突判定
-            if (this.checkCollision(obj)) {
-                if (obj.type === 'plant') {
-                    this.currentCombo++;
-                    const comboBonus = this.currentCombo > 1 ?
-                                      (this.currentCombo - 1) * CONFIG.COMBO_BONUS : 0;
-                    this.score += 10 + comboBonus;
-                    this.catchCount++;
-                    this.maxCombo = Math.max(this.maxCombo, this.currentCombo);
-                    this.createParticles(obj.x + obj.size / 2, obj.y + obj.size / 2,
-                                       '#4CAF50', 15);
-                } else {
-                    this.lives--;
-                    this.currentCombo = 0;
-                    this.createParticles(obj.x + obj.size / 2, obj.y + obj.size / 2,
-                                       '#f44336', 20);
-
-                    if (this.lives <= 0) {
-                        this.gameOver();
-                        return;
-                    }
-                }
-                this.fallingObjects.splice(i, 1);
-                this.updateUI();
-            }
-            // 画面外に出たら削除
-            else if (obj.y > this.canvas.height) {
-                if (obj.type === 'plant') {
-                    this.currentCombo = 0;
-                }
-                this.fallingObjects.splice(i, 1);
-            }
-        }
-
-        // パーティクル更新
-        for (let i = this.particles.length - 1; i >= 0; i--) {
-            const p = this.particles[i];
-            p.x += p.vx;
-            p.y += p.vy;
-            p.life--;
-
-            if (p.life <= 0) {
-                this.particles.splice(i, 1);
-            }
-        }
-    }
-
-    draw() {
-        // 背景
-        this.ctx.fillStyle = '#f0f0f0';
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-        // グリッド背景
-        this.ctx.strokeStyle = '#e0e0e0';
-        this.ctx.lineWidth = 1;
-        for (let i = 0; i < this.canvas.width; i += 50) {
-            this.ctx.beginPath();
-            this.ctx.moveTo(i, 0);
-            this.ctx.lineTo(i, this.canvas.height);
-            this.ctx.stroke();
-        }
-        for (let i = 0; i < this.canvas.height; i += 50) {
-            this.ctx.beginPath();
-            this.ctx.moveTo(0, i);
-            this.ctx.lineTo(this.canvas.width, i);
-            this.ctx.stroke();
-        }
-
-        // バスケット
-        this.ctx.fillStyle = '#FF6B6B';
-        this.ctx.beginPath();
-        this.ctx.moveTo(this.basket.x, this.basket.y + this.basket.height);
-        this.ctx.lineTo(this.basket.x + 10, this.basket.y);
-        this.ctx.lineTo(this.basket.x + this.basket.width - 10, this.basket.y);
-        this.ctx.lineTo(this.basket.x + this.basket.width, this.basket.y + this.basket.height);
-        this.ctx.closePath();
-        this.ctx.fill();
-
-        // バスケットの縁
-        this.ctx.strokeStyle = '#D63447';
-        this.ctx.lineWidth = 3;
-        this.ctx.stroke();
-
-        // バスケットのアイコン
-        this.ctx.font = '30px Arial';
-        this.ctx.fillText('🧺', this.basket.x + this.basket.width / 2 - 15,
-                         this.basket.y + this.basket.height - 10);
-
-        // 落ちてくるオブジェクト
-        if (this.fallingObjects.length > 0 && this.frameCount % 60 === 0) {
-            console.log('🎨 Drawing', this.fallingObjects.length, 'objects');
-        }
-        this.fallingObjects.forEach(obj => {
-            if (obj.useImage && this.imageLoaded) {
-                // ディッキア画像を描画
-                this.ctx.drawImage(this.dyckiaImage, obj.x, obj.y, obj.size, obj.size);
-            } else {
-                // 爆弾は絵文字で描画
-                this.ctx.font = `${obj.size}px Arial`;
-                this.ctx.fillText(obj.type === 'bomb' ? '💣' : '🌵', obj.x, obj.y + obj.size);
-            }
-        });
-
-        // パーティクル
-        this.particles.forEach(p => {
-            this.ctx.fillStyle = p.color;
-            this.ctx.globalAlpha = p.life / 30;
-            this.ctx.fillRect(p.x, p.y, 4, 4);
-        });
-        this.ctx.globalAlpha = 1;
-
-        // コンボ表示
-        if (this.currentCombo > 1) {
-            this.ctx.font = 'bold 24px Arial';
-            this.ctx.fillStyle = '#FF6B6B';
-            this.ctx.strokeStyle = 'white';
-            this.ctx.lineWidth = 3;
-            const comboText = `${this.currentCombo} コンボ!`;
-            const textWidth = this.ctx.measureText(comboText).width;
-            this.ctx.strokeText(comboText, this.canvas.width / 2 - textWidth / 2, 50);
-            this.ctx.fillText(comboText, this.canvas.width / 2 - textWidth / 2, 50);
-        }
-    }
-
-    gameLoop() {
-        if (this.state === GAME_STATE.PLAYING) {
-            this.update();
-            this.draw();
-            requestAnimationFrame(() => this.gameLoop());
-        }
+    showStartScreen() {
+        this.state = GAME_STATE.START;
+        document.getElementById('gameOverScreen').style.display = 'none';
+        document.getElementById('gameScreen').style.display = 'none';
+        document.getElementById('startScreen').style.display = 'flex';
+        this.updateHighScoreDisplay();
     }
 }
 
-// ゲーム開始
-window.addEventListener('load', () => {
-    new Game();
+// ゲーム初期化
+window.addEventListener('DOMContentLoaded', () => {
+    const game = new DyckiaFPS();
 });
