@@ -263,7 +263,7 @@ class Game {
         this.frameCount++;
 
         // オブジェクト生成
-        if (this.frameCount % CONFIG.SPAWN_RATE === 0) {
+        if (this.frameCount % CONFIG.SPAWN_RATE === 1) {
             this.spawnFallingObject();
         }
 
