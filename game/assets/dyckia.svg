@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <radialGradient id="leafGrad" cx="50%" cy="30%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="40%" style="stop-color:#e8e8e8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#c0c0c0;stop-opacity:1" />
+    </radialGradient>
+    <radialGradient id="centerGrad" cx="50%" cy="50%">
+      <stop offset="0%" style="stop-color:#d4d4d4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#a0a0a0;stop-opacity:1" />
+    </radialGradient>
+    <filter id="shadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+      <feOffset dx="0" dy="1" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- 背景の影 -->
+  <circle cx="100" cy="100" r="90" fill="#000000" opacity="0.1" filter="url(#shadow)"/>
+
+  <!-- ディッキアの葉（放射状に配置） -->
+  <g id="leaves" transform="translate(100, 100)">
+    <!-- 外側の葉 -->
+    <g opacity="0.9">
+      <path d="M 0,-75 Q -3,-60 -4,-45 Q -5,-30 -6,-15 Q -6,0 -5,10 L 5,10 Q 6,0 6,-15 Q 5,-30 4,-45 Q 3,-60 0,-75 Z"
+            fill="url(#leafGrad)" stroke="#a8a8a8" stroke-width="0.5" filter="url(#shadow)"/>
+      <path d="M 0,-75 Q -3,-60 -4,-45 Q -5,-30 -6,-15 Q -6,0 -5,10 L 5,10 Q 6,0 6,-15 Q 5,-30 4,-45 Q 3,-60 0,-75 Z"
+            fill="url(#leafGrad)" stroke="#a8a8a8" stroke-width="0.5" transform="rotate(30)" filter="url(#shadow)"/>
+      <path d="M 0,-75 Q -3,-60 -4,-45 Q -5,-30 -6,-15 Q -6,0 -5,10 L 5,10 Q 6,0 6,-15 Q 5,-30 4,-45 Q 3,-60 0,-75 Z"
+            fill="url(#leafGrad)" stroke="#a8a8a8" stroke-width="0.5" transform="rotate(60)" filter="url(#shadow)"/>
+      <path d="M 0,-75 Q -3,-60 -4,-45 Q -5,-30 -6,-15 Q -6,0 -5,10 L 5,10 Q 6,0 6,-15 Q 5,-30 4,-45 Q 3,-60 0,-75 Z"
+            fill="url(#leafGrad)" stroke="#a8a8a8" stroke-width="0.5" transform="rotate(90)" filter="url(#shadow)"/>
+      <path d="M 0,-75 Q -3,-60 -4,-45 Q -5,-30 -6,-15 Q -6,0 -5,10 L 5,10 Q 6,0 6,-15 Q 5,-30 4,-45 Q 3,-60 0,-75 Z"
+            fill="url(#leafGrad)" stroke="#a8a8a8" stroke-width="0.5" transform="rotate(120)" filter="url(#shadow)"/>
+      <path d="M 0,-75 Q -3,-60 -4,-45 Q -5,-30 -6,-15 Q -6,0 -5,10 L 5,10 Q 6,0 6,-15 Q 5,-30 4,-45 Q 3,-60 0,-75 Z"
+            fill="url(#leafGrad)" stroke="#a8a8a8" stroke-width="0.5" transform="rotate(150)" filter="url(#shadow)"/>
+      <path d="M 0,-75 Q -3,-60 -4,-45 Q -5,-30 -6,-15 Q -6,0 -5,10 L 5,10 Q 6,0 6,-15 Q 5,-30 4,-45 Q 3,-60 0,-75 Z"
+            fill="url(#leafGrad)" stroke="#a8a8a8" stroke-width="0.5" transform="rotate(180)" filter="url(#shadow)"/>
+      <path d="M 0,-75 Q -3,-60 -4,-45 Q -5,-30 -6,-15 Q -6,0 -5,10 L 5,10 Q 6,0 6,-15 Q 5,-30 4,-45 Q 3,-60 0,-75 Z"
+            fill="url(#leafGrad)" stroke="#a8a8a8" stroke-width="0.5" transform="rotate(210)" filter="url(#shadow)"/>
+      <path d="M 0,-75 Q -3,-60 -4,-45 Q -5,-30 -6,-15 Q -6,0 -5,10 L 5,10 Q 6,0 6,-15 Q 5,-30 4,-45 Q 3,-60 0,-75 Z"
+            fill="url(#leafGrad)" stroke="#a8a8a8" stroke-width="0.5" transform="rotate(240)" filter="url(#shadow)"/>
+      <path d="M 0,-75 Q -3,-60 -4,-45 Q -5,-30 -6,-15 Q -6,0 -5,10 L 5,10 Q 6,0 6,-15 Q 5,-30 4,-45 Q 3,-60 0,-75 Z"
+            fill="url(#leafGrad)" stroke="#a8a8a8" stroke-width="0.5" transform="rotate(270)" filter="url(#shadow)"/>
+      <path d="M 0,-75 Q -3,-60 -4,-45 Q -5,-30 -6,-15 Q -6,0 -5,10 L 5,10 Q 6,0 6,-15 Q 5,-30 4,-45 Q 3,-60 0,-75 Z"
+            fill="url(#leafGrad)" stroke="#a8a8a8" stroke-width="0.5" transform="rotate(300)" filter="url(#shadow)"/>
+      <path d="M 0,-75 Q -3,-60 -4,-45 Q -5,-30 -6,-15 Q -6,0 -5,10 L 5,10 Q 6,0 6,-15 Q 5,-30 4,-45 Q 3,-60 0,-75 Z"
+            fill="url(#leafGrad)" stroke="#a8a8a8" stroke-width="0.5" transform="rotate(330)" filter="url(#shadow)"/>
+    </g>
+
+    <!-- 中間の葉 -->
+    <g opacity="0.95">
+      <path d="M 0,-55 Q -2.5,-45 -3,-35 Q -3.5,-25 -4,-15 Q -4,0 -3,8 L 3,8 Q 4,0 4,-15 Q 3.5,-25 3,-35 Q 2.5,-45 0,-55 Z"
+            fill="url(#leafGrad)" stroke="#b0b0b0" stroke-width="0.5" transform="rotate(15)" filter="url(#shadow)"/>
+      <path d="M 0,-55 Q -2.5,-45 -3,-35 Q -3.5,-25 -4,-15 Q -4,0 -3,8 L 3,8 Q 4,0 4,-15 Q 3.5,-25 3,-35 Q 2.5,-45 0,-55 Z"
+            fill="url(#leafGrad)" stroke="#b0b0b0" stroke-width="0.5" transform="rotate(45)" filter="url(#shadow)"/>
+      <path d="M 0,-55 Q -2.5,-45 -3,-35 Q -3.5,-25 -4,-15 Q -4,0 -3,8 L 3,8 Q 4,0 4,-15 Q 3.5,-25 3,-35 Q 2.5,-45 0,-55 Z"
+            fill="url(#leafGrad)" stroke="#b0b0b0" stroke-width="0.5" transform="rotate(75)" filter="url(#shadow)"/>
+      <path d="M 0,-55 Q -2.5,-45 -3,-35 Q -3.5,-25 -4,-15 Q -4,0 -3,8 L 3,8 Q 4,0 4,-15 Q 3.5,-25 3,-35 Q 2.5,-45 0,-55 Z"
+            fill="url(#leafGrad)" stroke="#b0b0b0" stroke-width="0.5" transform="rotate(105)" filter="url(#shadow)"/>
+      <path d="M 0,-55 Q -2.5,-45 -3,-35 Q -3.5,-25 -4,-15 Q -4,0 -3,8 L 3,8 Q 4,0 4,-15 Q 3.5,-25 3,-35 Q 2.5,-45 0,-55 Z"
+            fill="url(#leafGrad)" stroke="#b0b0b0" stroke-width="0.5" transform="rotate(135)" filter="url(#shadow)"/>
+      <path d="M 0,-55 Q -2.5,-45 -3,-35 Q -3.5,-25 -4,-15 Q -4,0 -3,8 L 3,8 Q 4,0 4,-15 Q 3.5,-25 3,-35 Q 2.5,-45 0,-55 Z"
+            fill="url(#leafGrad)" stroke="#b0b0b0" stroke-width="0.5" transform="rotate(165)" filter="url(#shadow)"/>
+      <path d="M 0,-55 Q -2.5,-45 -3,-35 Q -3.5,-25 -4,-15 Q -4,0 -3,8 L 3,8 Q 4,0 4,-15 Q 3.5,-25 3,-35 Q 2.5,-45 0,-55 Z"
+            fill="url(#leafGrad)" stroke="#b0b0b0" stroke-width="0.5" transform="rotate(195)" filter="url(#shadow)"/>
+      <path d="M 0,-55 Q -2.5,-45 -3,-35 Q -3.5,-25 -4,-15 Q -4,0 -3,8 L 3,8 Q 4,0 4,-15 Q 3.5,-25 3,-35 Q 2.5,-45 0,-55 Z"
+            fill="url(#leafGrad)" stroke="#b0b0b0" stroke-width="0.5" transform="rotate(225)" filter="url(#shadow)"/>
+      <path d="M 0,-55 Q -2.5,-45 -3,-35 Q -3.5,-25 -4,-15 Q -4,0 -3,8 L 3,8 Q 4,0 4,-15 Q 3.5,-25 3,-35 Q 2.5,-45 0,-55 Z"
+            fill="url(#leafGrad)" stroke="#b0b0b0" stroke-width="0.5" transform="rotate(255)" filter="url(#shadow)"/>
+      <path d="M 0,-55 Q -2.5,-45 -3,-35 Q -3.5,-25 -4,-15 Q -4,0 -3,8 L 3,8 Q 4,0 4,-15 Q 3.5,-25 3,-35 Q 2.5,-45 0,-55 Z"
+            fill="url(#leafGrad)" stroke="#b0b0b0" stroke-width="0.5" transform="rotate(285)" filter="url(#shadow)"/>
+      <path d="M 0,-55 Q -2.5,-45 -3,-35 Q -3.5,-25 -4,-15 Q -4,0 -3,8 L 3,8 Q 4,0 4,-15 Q 3.5,-25 3,-35 Q 2.5,-45 0,-55 Z"
+            fill="url(#leafGrad)" stroke="#b0b0b0" stroke-width="0.5" transform="rotate(315)" filter="url(#shadow)"/>
+      <path d="M 0,-55 Q -2.5,-45 -3,-35 Q -3.5,-25 -4,-15 Q -4,0 -3,8 L 3,8 Q 4,0 4,-15 Q 3.5,-25 3,-35 Q 2.5,-45 0,-55 Z"
+            fill="url(#leafGrad)" stroke="#b0b0b0" stroke-width="0.5" transform="rotate(345)" filter="url(#shadow)"/>
+    </g>
+
+    <!-- 内側の若い葉 -->
+    <g>
+      <path d="M 0,-35 Q -2,-28 -2.5,-21 Q -3,-14 -3,-7 Q -3,0 -2,5 L 2,5 Q 3,0 3,-7 Q 3,-14 2.5,-21 Q 2,-28 0,-35 Z"
+            fill="#f5f5f5" stroke="#c8c8c8" stroke-width="0.5" transform="rotate(22.5)" filter="url(#shadow)"/>
+      <path d="M 0,-35 Q -2,-28 -2.5,-21 Q -3,-14 -3,-7 Q -3,0 -2,5 L 2,5 Q 3,0 3,-7 Q 3,-14 2.5,-21 Q 2,-28 0,-35 Z"
+            fill="#f5f5f5" stroke="#c8c8c8" stroke-width="0.5" transform="rotate(67.5)" filter="url(#shadow)"/>
+      <path d="M 0,-35 Q -2,-28 -2.5,-21 Q -3,-14 -3,-7 Q -3,0 -2,5 L 2,5 Q 3,0 3,-7 Q 3,-14 2.5,-21 Q 2,-28 0,-35 Z"
+            fill="#f5f5f5" stroke="#c8c8c8" stroke-width="0.5" transform="rotate(112.5)" filter="url(#shadow)"/>
+      <path d="M 0,-35 Q -2,-28 -2.5,-21 Q -3,-14 -3,-7 Q -3,0 -2,5 L 2,5 Q 3,0 3,-7 Q 3,-14 2.5,-21 Q 2,-28 0,-35 Z"
+            fill="#f5f5f5" stroke="#c8c8c8" stroke-width="0.5" transform="rotate(157.5)" filter="url(#shadow)"/>
+      <path d="M 0,-35 Q -2,-28 -2.5,-21 Q -3,-14 -3,-7 Q -3,0 -2,5 L 2,5 Q 3,0 3,-7 Q 3,-14 2.5,-21 Q 2,-28 0,-35 Z"
+            fill="#f5f5f5" stroke="#c8c8c8" stroke-width="0.5" transform="rotate(202.5)" filter="url(#shadow)"/>
+      <path d="M 0,-35 Q -2,-28 -2.5,-21 Q -3,-14 -3,-7 Q -3,0 -2,5 L 2,5 Q 3,0 3,-7 Q 3,-14 2.5,-21 Q 2,-28 0,-35 Z"
+            fill="#f5f5f5" stroke="#c8c8c8" stroke-width="0.5" transform="rotate(247.5)" filter="url(#shadow)"/>
+      <path d="M 0,-35 Q -2,-28 -2.5,-21 Q -3,-14 -3,-7 Q -3,0 -2,5 L 2,5 Q 3,0 3,-7 Q 3,-14 2.5,-21 Q 2,-28 0,-35 Z"
+            fill="#f5f5f5" stroke="#c8c8c8" stroke-width="0.5" transform="rotate(292.5)" filter="url(#shadow)"/>
+      <path d="M 0,-35 Q -2,-28 -2.5,-21 Q -3,-14 -3,-7 Q -3,0 -2,5 L 2,5 Q 3,0 3,-7 Q 3,-14 2.5,-21 Q 2,-28 0,-35 Z"
+            fill="#f5f5f5" stroke="#c8c8c8" stroke-width="0.5" transform="rotate(337.5)" filter="url(#shadow)"/>
+    </g>
+
+    <!-- 中心部 -->
+    <circle cx="0" cy="0" r="12" fill="url(#centerGrad)" filter="url(#shadow)"/>
+  </g>
+</svg>
