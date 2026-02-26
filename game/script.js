@@ -172,12 +172,15 @@ class Game {
 
         this.showScreen('gameScreen');
 
-        // 画面表示後にキャンバスサイズを再計算（display:noneだとサイズが0になるため）
-        this.resizeCanvas();
-        this.basket.x = this.canvas.width / 2 - CONFIG.BASKET_WIDTH / 2;
-
-        this.updateUI();
-        this.gameLoop();
+        // 画面表示後、次のフレームでキャンバスサイズを再計算
+        // （ブラウザがレイアウトを更新してから実行）
+        requestAnimationFrame(() => {
+            this.resizeCanvas();
+            this.basket.x = this.canvas.width / 2 - CONFIG.BASKET_WIDTH / 2;
+            console.log('🎮 Game started! Canvas size:', this.canvas.width, 'x', this.canvas.height);
+            this.updateUI();
+            this.gameLoop();
+        });
     }
 
     pauseGame() {
