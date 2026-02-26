@@ -234,6 +234,7 @@ class Game {
             useImage: !isBomb && this.imageLoaded
         };
 
+        console.log('✨ Created object:', obj.type, 'at x:', obj.x, 'y:', obj.y, 'speed:', obj.speed);
         this.fallingObjects.push(obj);
     }
 
@@ -264,7 +265,9 @@ class Game {
 
         // オブジェクト生成
         if (this.frameCount % CONFIG.SPAWN_RATE === 1) {
+            console.log('🌵 Spawning object at frame:', this.frameCount);
             this.spawnFallingObject();
+            console.log('📦 Total falling objects:', this.fallingObjects.length);
         }
 
         // オブジェクト更新
@@ -361,6 +364,9 @@ class Game {
                          this.basket.y + this.basket.height - 10);
 
         // 落ちてくるオブジェクト
+        if (this.fallingObjects.length > 0 && this.frameCount % 60 === 0) {
+            console.log('🎨 Drawing', this.fallingObjects.length, 'objects');
+        }
         this.fallingObjects.forEach(obj => {
             if (obj.useImage && this.imageLoaded) {
                 // ディッキア画像を描画
