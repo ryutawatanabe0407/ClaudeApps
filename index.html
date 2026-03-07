@@ -1,101 +1,130 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ガントチャートツール</title>
-    <link rel="stylesheet" href="gantt-style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gantt Chart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="gantt-style.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="header-inner">
-                <div class="header-text">
-                    <h1>ガントチャートツール</h1>
-                    <p>プロジェクトのタスクを視覚的に管理</p>
-                </div>
-                <div class="header-photo">
-                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='520' viewBox='0 0 900 520'%3E%3Cdefs%3E%3ClinearGradient id='g1' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23f5f0e8'/%3E%3Cstop offset='100%25' stop-color='%23c9d7e6'/%3E%3C/linearGradient%3E%3ClinearGradient id='g2' x1='0' y1='1' x2='1' y2='0'%3E%3Cstop offset='0%25' stop-color='%23e9dfcf'/%3E%3Cstop offset='100%25' stop-color='%23a8bfd8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='900' height='520' fill='url(%23g1)'/%3E%3Ccircle cx='180' cy='120' r='120' fill='url(%23g2)' opacity='0.8'/%3E%3Crect x='420' y='40' width='420' height='220' rx='24' fill='%23ffffff' opacity='0.5'/%3E%3Crect x='80' y='280' width='520' height='180' rx='28' fill='%23ffffff' opacity='0.45'/%3E%3Cpath d='M0,420 C160,360 260,460 420,410 C560,365 700,455 900,390 L900,520 L0,520 Z' fill='%23b9c9db' opacity='0.65'/%3E%3C/svg%3E" alt="抽象的なワークスペースのイメージ">
-                </div>
-            </div>
-        </header>
+  <div class="container">
+    <header>
+      <div class="header-inner">
+        <div class="header-text">
+          <h1>Gantt Chart</h1>
+          <p>プロジェクトのタスクを視覚的に管理</p>
+        </div>
+        <div class="header-stats" id="headerStats"></div>
+      </div>
+    </header>
 
-        <main>
-            <div class="controls">
-                <button class="btn btn-primary" id="addTaskBtn">タスクを追加</button>
-                <button class="btn btn-secondary" id="clearAllBtn">すべてクリア</button>
-                <button class="btn btn-secondary" id="importBtn">インポート</button>
-                <button class="btn btn-secondary" id="exportBtn">エクスポート</button>
-                <input type="file" id="importFile" accept=".xlsx" style="display: none;">
-            </div>
+    <main>
+      <div class="controls">
+        <button class="btn btn-primary" id="addTaskBtn">+ タスクを追加</button>
+        <button class="btn btn-secondary" id="importBtn">↑ インポート</button>
+        <button class="btn btn-secondary" id="exportBtn">↓ エクスポート</button>
+        <button class="btn btn-danger" id="clearAllBtn">✕ すべて削除</button>
+        <input type="file" id="importFile" accept=".xlsx" style="display:none">
+        <div class="filter-bar">
+          <select class="filter-select" id="filterStatus">
+            <option value="all">すべてのステータス</option>
+            <option value="todo">TODO</option>
+            <option value="in_progress">進行中</option>
+            <option value="done">完了</option>
+          </select>
+          <select class="filter-select" id="filterSort">
+            <option value="order">並び順</option>
+            <option value="start_date">開始日順</option>
+            <option value="end_date">終了日順</option>
+            <option value="progress_desc">進捗率↓</option>
+          </select>
+        </div>
+      </div>
 
-            <div class="task-form" id="taskForm" style="display: none;">
-                <h3 id="formTitle">新しいタスク</h3>
-                <div class="form-group">
-                    <label for="taskName">タスク名</label>
-                    <input type="text" id="taskName" placeholder="タスク名を入力">
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="startDate">開始日</label>
-                        <input type="date" id="startDate">
-                    </div>
-                    <div class="form-group">
-                        <label for="endDate">終了日</label>
-                        <input type="date" id="endDate">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="progress">進捗率: <span id="progressValue">0</span>%</label>
-                    <input type="range" id="progress" min="0" max="100" value="0">
-                </div>
-                <div class="form-group">
-                    <label for="taskColor">カラー</label>
-                    <input type="color" id="taskColor" value="#4A90E2">
-                </div>
-                <div class="form-actions">
-                    <button class="btn btn-primary" id="saveTaskBtn">保存</button>
-                    <button class="btn btn-secondary" id="cancelTaskBtn">キャンセル</button>
-                </div>
-            </div>
+      <!-- タスクフォーム -->
+      <div class="task-form" id="taskForm" style="display:none">
+        <h3 id="formTitle">新しいタスク</h3>
+        <div class="form-group">
+          <label for="taskName">タスク名</label>
+          <input type="text" id="taskName" placeholder="タスク名を入力">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="startDate">開始日</label>
+            <input type="date" id="startDate">
+          </div>
+          <div class="form-group">
+            <label for="endDate">終了日</label>
+            <input type="date" id="endDate">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="progress">進捗率: <span id="progressValue">0</span>%</label>
+            <input type="range" id="progress" min="0" max="100" value="0">
+          </div>
+          <div class="form-group">
+            <label for="taskStatus">ステータス</label>
+            <select class="filter-select" id="taskStatus" style="width:100%">
+              <option value="todo">TODO</option>
+              <option value="in_progress">進行中</option>
+              <option value="done">完了</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="taskColor">カラー</label>
+          <input type="color" id="taskColor" value="#2563EB">
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" id="saveTaskBtn">保存</button>
+          <button class="btn btn-secondary" id="cancelTaskBtn">キャンセル</button>
+        </div>
+      </div>
 
-            <div class="task-list" id="taskList">
-                <h3>タスク一覧</h3>
-                <div id="tasks"></div>
-            </div>
+      <!-- タスク一覧 -->
+      <div class="task-list">
+        <div class="task-list-header">
+          <h3>タスク一覧</h3>
+          <span class="task-count" id="taskCount">0 件</span>
+        </div>
+        <div id="tasks"></div>
+      </div>
 
-            <div class="gantt-container">
-                <h3>ガントチャート</h3>
-                <div class="gantt-controls">
-                    <label for="timeScale">時間軸:</label>
-                    <select id="timeScale" class="time-scale-select">
-                        <option value="day">日単位</option>
-                        <option value="week">週単位</option>
-                        <option value="month">月単位</option>
-                    </select>
-                    <button class="btn-icon" id="zoomInBtn">+</button>
-                    <button class="btn-icon" id="zoomOutBtn">-</button>
-                    <button class="btn-icon" id="todayBtn">今日</button>
-                </div>
-                <div class="gantt-chart" id="ganttChart">
-                    <div class="gantt-empty">
-                        タスクを追加してガントチャートを表示しましょう
-                    </div>
-                </div>
-            </div>
-        </main>
+      <!-- ガントチャート -->
+      <div class="gantt-container">
+        <div class="gantt-container-header">
+          <h3>ガントチャート</h3>
+          <div class="gantt-controls">
+            <label for="timeScale">時間軸:</label>
+            <select id="timeScale" class="time-scale-select">
+              <option value="day">日単位</option>
+              <option value="week">週単位</option>
+              <option value="month">月単位</option>
+            </select>
+            <button class="btn-icon" id="zoomInBtn">+ ズーム</button>
+            <button class="btn-icon" id="zoomOutBtn">- ズーム</button>
+            <button class="btn-icon" id="todayBtn">今日</button>
+          </div>
+        </div>
+        <div class="gantt-chart" id="ganttChart">
+          <div class="gantt-empty">
+            <div class="gantt-empty-icon">📊</div>
+            <span>タスクを追加してガントチャートを表示しましょう</span>
+          </div>
+        </div>
+      </div>
+    </main>
 
-        <footer>
-            <p>© 2026 Project Management Tool</p>
-            <p style="margin-top: 10px;">
-                <a href="game/index.html" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;">
-                    🌵 ディッキアキャッチゲームで遊ぶ →
-                </a>
-            </p>
-        </footer>
-    </div>
+    <footer>
+      <span>Gantt Chart — powered by Node.js + SQLite</span>
+      <span style="color:var(--text-muted)">v2.0</span>
+    </footer>
+  </div>
 
-    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
-    <script src="gantt-script.js"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+  <script src="gantt-script.js"></script>
 </body>
 </html>
