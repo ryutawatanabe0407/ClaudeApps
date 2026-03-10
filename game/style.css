@@ -532,6 +532,48 @@ body {
 }
 
 /* ========== レスポンシブ ========== */
+
+/* PC向け（大画面） */
+@media (min-width: 1200px) {
+    .game-title {
+        font-size: 5rem;
+    }
+
+    .game-subtitle {
+        font-size: 2rem;
+    }
+
+    .btn {
+        font-size: 1.8rem;
+        padding: 20px 50px;
+    }
+
+    .instructions {
+        max-width: 800px;
+        font-size: 1.3rem;
+    }
+
+    .instructions h3 {
+        font-size: 2rem;
+    }
+
+    .instructions li {
+        font-size: 1.3rem;
+    }
+}
+
+/* タブレット・中画面 */
+@media (min-width: 769px) and (max-width: 1199px) {
+    .game-title {
+        font-size: 3.5rem;
+    }
+
+    .instructions {
+        max-width: 700px;
+    }
+}
+
+/* モバイル・小画面 */
 @media (max-width: 768px) {
     .game-title {
         font-size: 2.5rem;
@@ -549,6 +591,11 @@ body {
     .instructions {
         font-size: 0.9rem;
         padding: 20px;
+        max-width: 90%;
+    }
+
+    .instructions li {
+        font-size: 1rem;
     }
 
     .game-over-title {
@@ -565,5 +612,24 @@ body {
 
     #gameCanvas {
         cursor: auto;
+    }
+
+    .crosshair {
+        display: none;
+    }
+
+    .stats {
+        gap: 15px;
+    }
+
+    .stat-item {
+        padding: 15px 20px;
+    }
+}
+
+/* PC専用：クロスヘアをマウスに追従させる */
+@media (hover: hover) and (pointer: fine) {
+    body {
+        cursor: none;
     }
 }
