@@ -156,7 +156,9 @@ class DyckiaFPS {
 
         document.getElementById('startScreen').style.display = 'none';
         document.getElementById('gameOverScreen').style.display = 'none';
-        document.getElementById('gameScreen').style.display = 'block';
+        const gameScreen = document.getElementById('gameScreen');
+        gameScreen.style.display = 'block';
+        gameScreen.classList.add('playing');
 
         this.updateUI();
 
@@ -458,6 +460,7 @@ class DyckiaFPS {
     gameOver() {
         this.state = GAME_STATE.GAME_OVER;
         clearInterval(this.gameTimer);
+        document.getElementById('gameScreen').classList.remove('playing');
 
         // ハイスコア更新
         if (this.score > this.highScore) {
@@ -487,7 +490,9 @@ class DyckiaFPS {
     showStartScreen() {
         this.state = GAME_STATE.START;
         document.getElementById('gameOverScreen').style.display = 'none';
-        document.getElementById('gameScreen').style.display = 'none';
+        const gameScreen = document.getElementById('gameScreen');
+        gameScreen.style.display = 'none';
+        gameScreen.classList.remove('playing');
         document.getElementById('startScreen').style.display = 'flex';
         this.updateHighScoreDisplay();
     }

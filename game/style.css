@@ -256,7 +256,15 @@ body {
     width: 100%;
     height: 100%;
     display: block;
-    cursor: none; /* ゲーム画面ではカーソル非表示 */
+}
+
+/* ゲームプレイ中のみカーソルを非表示にしてクロスヘアを表示 */
+#gameScreen.playing #gameCanvas {
+    cursor: none;
+}
+
+#gameScreen.playing .crosshair {
+    display: block;
 }
 
 /* ========== クロスヘア（照準） ========== */
@@ -270,6 +278,7 @@ body {
     pointer-events: none;
     z-index: 1000;
     transition: transform 0.05s linear;
+    display: none; /* デフォルトは非表示 */
 }
 
 .crosshair-dot {
