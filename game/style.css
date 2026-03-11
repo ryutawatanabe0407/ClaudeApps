@@ -277,7 +277,6 @@ body {
     height: 40px;
     pointer-events: none;
     z-index: 1000;
-    transition: transform 0.05s linear;
     display: none; /* デフォルトは非表示 */
 }
 
