@@ -214,6 +214,7 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
+    pointer-events: none !important;
 }
 
 .score-display .label, .time-display .label, .ammo-display .label {
@@ -237,6 +238,7 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
+    pointer-events: none !important;
 }
 
 .combo-value {
@@ -275,7 +277,7 @@ body {
     transform: translate(-50%, -50%);
     width: 40px;
     height: 40px;
-    pointer-events: none;
+    pointer-events: none !important;
     z-index: 1000;
     display: none; /* デフォルトは非表示 */
 }
@@ -343,7 +345,7 @@ body {
     border: 3px solid #ff0;
     box-shadow: 0 0 30px rgba(255, 255, 0, 0.8);
     z-index: 500;
-    pointer-events: none;
+    pointer-events: none !important;
 }
 
 .reload-text {
@@ -362,7 +364,7 @@ body {
     transform: translate(-50%, -50%);
     width: 60px;
     height: 60px;
-    pointer-events: none;
+    pointer-events: none !important;
     z-index: 1001;
     animation: hitFlash 0.2s ease-out;
 }
