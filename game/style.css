@@ -9,7 +9,7 @@ body {
     background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
     color: #fff;
     overflow: hidden;
-    cursor: none; /* FPS風カーソル非表示 */
+    cursor: auto; /* デフォルトはカーソル表示 */
 }
 
 .container {
@@ -256,7 +256,7 @@ body {
     width: 100%;
     height: 100%;
     display: block;
-    cursor: none;
+    cursor: none; /* ゲーム画面ではカーソル非表示 */
 }
 
 /* ========== クロスヘア（照準） ========== */
@@ -624,12 +624,5 @@ body {
 
     .stat-item {
         padding: 15px 20px;
-    }
-}
-
-/* PC専用：クロスヘアをマウスに追従させる */
-@media (hover: hover) and (pointer: fine) {
-    body {
-        cursor: none;
     }
 }

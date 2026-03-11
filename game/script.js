@@ -131,11 +131,14 @@ class DyckiaFPS {
         // マウス移動でクロスヘアを更新（PC向け）
         this.canvas.addEventListener('mousemove', (e) => {
             if (this.state === GAME_STATE.PLAYING) {
-                // クロスヘアの位置を更新（必要に応じて）
                 this.mouseX = e.clientX;
                 this.mouseY = e.clientY;
+                this.updateCrosshair(e.clientX, e.clientY);
             }
         });
+
+        // クロスヘアの初期化
+        this.crosshair = document.querySelector('.crosshair');
     }
 
     startGame() {
@@ -489,6 +492,13 @@ class DyckiaFPS {
         document.getElementById('gameScreen').style.display = 'none';
         document.getElementById('startScreen').style.display = 'flex';
         this.updateHighScoreDisplay();
+    }
+
+    updateCrosshair(x, y) {
+        if (this.crosshair) {
+            this.crosshair.style.left = x + 'px';
+            this.crosshair.style.top = y + 'px';
+        }
     }
 }
 
