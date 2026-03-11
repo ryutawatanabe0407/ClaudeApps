@@ -110,11 +110,14 @@ class DyckiaFPS {
                 }
             }
 
-            // スペースキーで画面中央に射撃（PC向け）
+            // スペースキーでマウス位置に射撃（PC向け）
             if (e.key === ' ' || e.key === 'Spacebar') {
                 e.preventDefault();
                 if (this.state === GAME_STATE.PLAYING && !this.isReloading) {
-                    this.shoot(this.canvas.width / 2, this.canvas.height / 2);
+                    // マウス位置で射撃、未設定なら画面中央
+                    const x = this.mouseX !== undefined ? this.mouseX : this.canvas.width / 2;
+                    const y = this.mouseY !== undefined ? this.mouseY : this.canvas.height / 2;
+                    this.shoot(x, y);
                 }
             }
 
@@ -499,7 +502,9 @@ class DyckiaFPS {
 
     updateCrosshair(x, y) {
         if (this.crosshair) {
-            this.crosshair.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
+            // 左上を基準にして直接位置を設定
+            this.crosshair.style.left = `${x}px`;
+            this.crosshair.style.top = `${y}px`;
         }
     }
 }
