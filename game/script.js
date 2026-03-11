@@ -11,8 +11,14 @@ const CONFIG = {
     COMBO_MULTIPLIER: 1.5
 };
 
-// ディッキア画像のパス
-const DYCKIA_IMAGE_PATH = 'assets/dyckia.svg';
+// ディッキア画像のパス（複数種類）
+const DYCKIA_IMAGE_PATHS = [
+    'assets/dyckia.svg',   // 緑
+    'assets/dyckia2.svg',  // 赤
+    'assets/dyckia3.svg',  // 青
+    'assets/dyckia4.svg',  // 黄
+    'assets/dyckia5.svg'   // 紫
+];
 
 // ゲーム状態
 const GAME_STATE = {
@@ -44,12 +50,16 @@ class DyckiaFPS {
         this.targets = [];
         this.particles = [];
 
-        // ディッキア画像の読み込み
-        this.dyckiaImage = new Image();
-        this.dyckiaImage.src = DYCKIA_IMAGE_PATH;
-        this.dyckiaImage.onerror = () => {
-            console.error('Failed to load dyckia image');
-        };
+        // ディッキア画像の読み込み（複数種類）
+        this.dyckiaImages = [];
+        DYCKIA_IMAGE_PATHS.forEach((path, index) => {
+            const img = new Image();
+            img.src = path;
+            img.onerror = () => {
+                console.error(`Failed to load dyckia image: ${path}`);
+            };
+            this.dyckiaImages.push(img);
+        });
 
         this.setupCanvas();
         this.setupEventListeners();
@@ -91,14 +101,42 @@ class DyckiaFPS {
             }
         });
 
-        // リロード（Rキー）
+        // キーボード操作
         document.addEventListener('keydown', (e) => {
+            // リロード（Rキー）
             if (e.key === 'r' || e.key === 'R') {
                 if (this.state === GAME_STATE.PLAYING && !this.isReloading && this.ammo < this.maxAmmo) {
                     this.reload();
                 }
             }
+
+            // スペースキーで画面中央に射撃（PC向け）
+            if (e.key === ' ' || e.key === 'Spacebar') {
+                e.preventDefault();
+                if (this.state === GAME_STATE.PLAYING && !this.isReloading) {
+                    this.shoot(this.canvas.width / 2, this.canvas.height / 2);
+                }
+            }
+
+            // ESCキーでメニューに戻る
+            if (e.key === 'Escape') {
+                if (this.state === GAME_STATE.PLAYING) {
+                    this.gameOver();
+                } else if (this.state === GAME_STATE.GAME_OVER) {
+                    this.showStartScreen();
+                }
+            }
         });
+
+        // マウス移動でクロスヘアを更新（PC向け）
+        document.addEventListener('mousemove', (e) => {
+            this.mouseX = e.clientX;
+            this.mouseY = e.clientY;
+            this.updateCrosshair(e.clientX, e.clientY);
+        });
+
+        // クロスヘアの初期化
+        this.crosshair = document.querySelector('.crosshair');
     }
 
     startGame() {
@@ -168,7 +206,8 @@ class DyckiaFPS {
             y: margin + Math.random() * (this.canvas.height - margin * 2),
             size: CONFIG.TARGET_SIZE,
             spawnTime: Date.now(),
-            scale: 0 // アニメーション用
+            scale: 0, // アニメーション用
+            imageIndex: Math.floor(Math.random() * this.dyckiaImages.length) // ランダムな画像を選択
         };
         this.targets.push(target);
     }
@@ -371,10 +410,11 @@ class DyckiaFPS {
         this.ctx.ellipse(0, 10, target.size * 0.4, target.size * 0.15, 0, 0, Math.PI * 2);
         this.ctx.fill();
 
-        // ディッキア画像
-        if (this.dyckiaImage.complete) {
+        // ディッキア画像（ランダムな種類）
+        const dyckiaImage = this.dyckiaImages[target.imageIndex];
+        if (dyckiaImage && dyckiaImage.complete) {
             this.ctx.drawImage(
-                this.dyckiaImage,
+                dyckiaImage,
                 -target.size / 2,
                 -target.size / 2,
                 target.size,
@@ -450,6 +490,12 @@ class DyckiaFPS {
         document.getElementById('gameScreen').style.display = 'none';
         document.getElementById('startScreen').style.display = 'flex';
         this.updateHighScoreDisplay();
+    }
+
+    updateCrosshair(x, y) {
+        if (this.crosshair) {
+            this.crosshair.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
+        }
     }
 }
 
