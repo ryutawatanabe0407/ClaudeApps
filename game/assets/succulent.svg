@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- 多肉植物（エケベリア風） -->
+  <g id="succulent">
+    <!-- 外側の葉（第1層） -->
+    <ellipse cx="100" cy="110" rx="45" ry="20" fill="#90EE90" transform="rotate(0 100 100)"/>
+    <ellipse cx="100" cy="110" rx="45" ry="20" fill="#98FB98" transform="rotate(45 100 100)"/>
+    <ellipse cx="100" cy="110" rx="45" ry="20" fill="#90EE90" transform="rotate(90 100 100)"/>
+    <ellipse cx="100" cy="110" rx="45" ry="20" fill="#98FB98" transform="rotate(135 100 100)"/>
+    <ellipse cx="100" cy="110" rx="45" ry="20" fill="#90EE90" transform="rotate(180 100 100)"/>
+    <ellipse cx="100" cy="110" rx="45" ry="20" fill="#98FB98" transform="rotate(225 100 100)"/>
+    <ellipse cx="100" cy="110" rx="45" ry="20" fill="#90EE90" transform="rotate(270 100 100)"/>
+    <ellipse cx="100" cy="110" rx="45" ry="20" fill="#98FB98" transform="rotate(315 100 100)"/>
+
+    <!-- 中間の葉（第2層） -->
+    <ellipse cx="100" cy="105" rx="35" ry="15" fill="#7CFC00" transform="rotate(22.5 100 100)"/>
+    <ellipse cx="100" cy="105" rx="35" ry="15" fill="#7FFF00" transform="rotate(67.5 100 100)"/>
+    <ellipse cx="100" cy="105" rx="35" ry="15" fill="#7CFC00" transform="rotate(112.5 100 100)"/>
+    <ellipse cx="100" cy="105" rx="35" ry="15" fill="#7FFF00" transform="rotate(157.5 100 100)"/>
+    <ellipse cx="100" cy="105" rx="35" ry="15" fill="#7CFC00" transform="rotate(202.5 100 100)"/>
+    <ellipse cx="100" cy="105" rx="35" ry="15" fill="#7FFF00" transform="rotate(247.5 100 100)"/>
+    <ellipse cx="100" cy="105" rx="35" ry="15" fill="#7CFC00" transform="rotate(292.5 100 100)"/>
+    <ellipse cx="100" cy="105" rx="35" ry="15" fill="#7FFF00" transform="rotate(337.5 100 100)"/>
+
+    <!-- 内側の葉（第3層） -->
+    <ellipse cx="100" cy="100" rx="25" ry="12" fill="#ADFF2F" transform="rotate(0 100 100)"/>
+    <ellipse cx="100" cy="100" rx="25" ry="12" fill="#BFFF00" transform="rotate(45 100 100)"/>
+    <ellipse cx="100" cy="100" rx="25" ry="12" fill="#ADFF2F" transform="rotate(90 100 100)"/>
+    <ellipse cx="100" cy="100" rx="25" ry="12" fill="#BFFF00" transform="rotate(135 100 100)"/>
+    <ellipse cx="100" cy="100" rx="25" ry="12" fill="#ADFF2F" transform="rotate(180 100 100)"/>
+    <ellipse cx="100" cy="100" rx="25" ry="12" fill="#BFFF00" transform="rotate(225 100 100)"/>
+    <ellipse cx="100" cy="100" rx="25" ry="12" fill="#ADFF2F" transform="rotate(270 100 100)"/>
+    <ellipse cx="100" cy="100" rx="25" ry="12" fill="#BFFF00" transform="rotate(315 100 100)"/>
+
+    <!-- 中心部 -->
+    <circle cx="100" cy="100" r="15" fill="#FFE4B5"/>
+    <circle cx="100" cy="100" r="10" fill="#F0E68C"/>
+
+    <!-- ハイライト -->
+    <ellipse cx="95" cy="95" rx="8" ry="6" fill="#FFFACD" opacity="0.6"/>
+  </g>
+
+  <!-- 鉢 -->
+  <g id="pot">
+    <path d="M 70 140 L 75 170 L 125 170 L 130 140 Z" fill="#CD853F"/>
+    <ellipse cx="100" cy="140" rx="30" ry="10" fill="#D2691E"/>
+    <path d="M 70 140 Q 100 145 130 140" stroke="#8B4513" stroke-width="2" fill="none"/>
+  </g>
+
+  <!-- 影 -->
+  <ellipse cx="100" cy="185" rx="30" ry="8" fill="rgba(0,0,0,0.3)"/>
+</svg>
