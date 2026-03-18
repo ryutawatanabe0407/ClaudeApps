@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌵 ディッキア育成ゲーム</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- スタート画面 -->
+        <div id="startScreen" class="screen">
+            <div class="title-area">
+                <h1 class="game-title">🌵 ディッキア育成ゲーム</h1>
+                <p class="game-subtitle">あなただけのディッキアを育てよう</p>
+            </div>
+            <div class="menu-area">
+                <button class="btn btn-start" id="startBtn">
+                    <span class="btn-icon">🌱</span>
+                    育成開始
+                </button>
+                <button class="btn btn-continue" id="continueBtn" style="display: none;">
+                    <span class="btn-icon">🌿</span>
+                    育成を続ける
+                </button>
+            </div>
+            <div class="instructions">
+                <h3>育成方法</h3>
+                <ul>
+                    <li>💧 水やり - 水分ゲージを回復（クールダウン: 8時間）</li>
+                    <li>🌾 肥料やり - 栄養ゲージを回復（クールダウン: 24時間）</li>
+                    <li>🌟 進化 - 累計水やり・肥料で5段階進化</li>
+                    <li>⏰ 時間経過で水分・栄養が減少</li>
+                    <li>📊 統計画面で育成ログを確認</li>
+                </ul>
+            </div>
+            <a href="../index.html" class="back-link">← トップページへ戻る</a>
+        </div>
+
+        <!-- ゲーム画面 -->
+        <div id="gameScreen" class="screen" style="display: none;">
+            <div class="game-header">
+                <h2 id="characterName">ディッキアちゃん</h2>
+                <button class="btn-stats" id="statsBtn">📊 統計</button>
+            </div>
+
+            <canvas id="gameCanvas"></canvas>
+
+            <div class="status-panel">
+                <div class="gauge-container">
+                    <div class="gauge-label">💧 水分</div>
+                    <div class="gauge-bar">
+                        <div class="gauge-fill water-gauge" id="waterGauge" style="width: 50%;"></div>
+                        <span class="gauge-value" id="waterValue">50</span>
+                    </div>
+                </div>
+                <div class="gauge-container">
+                    <div class="gauge-label">🌾 栄養</div>
+                    <div class="gauge-bar">
+                        <div class="gauge-fill nutrition-gauge" id="nutritionGauge" style="width: 50%;"></div>
+                        <span class="gauge-value" id="nutritionValue">50</span>
+                    </div>
+                </div>
+                <div class="stage-display">
+                    <span class="stage-label">成長段階:</span>
+                    <span class="stage-value" id="stageDisplay">種子 (0/4)</span>
+                </div>
+            </div>
+
+            <div class="action-panel">
+                <button class="btn btn-action btn-water" id="waterBtn">
+                    <span class="btn-icon">💧</span>
+                    水やり
+                    <span class="cooldown-text" id="waterCooldown"></span>
+                </button>
+                <button class="btn btn-action btn-fertilize" id="fertilizeBtn">
+                    <span class="btn-icon">🌾</span>
+                    肥料やり
+                    <span class="cooldown-text" id="fertilizeCooldown"></span>
+                </button>
+                <button class="btn btn-reset" id="resetBtn">
+                    <span class="btn-icon">🔄</span>
+                    リセット
+                </button>
+            </div>
+        </div>
+
+        <!-- 統計画面 -->
+        <div id="statsScreen" class="screen" style="display: none;">
+            <div class="stats-header">
+                <h2>📊 育成統計</h2>
+                <button class="btn btn-back" id="backBtn">← 戻る</button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">育成日数</div>
+                    <div class="stat-value" id="statDays">0日</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">総水やり回数</div>
+                    <div class="stat-value" id="statWater">0回</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">総肥料回数</div>
+                    <div class="stat-value" id="statFertilize">0回</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">現在の成長段階</div>
+                    <div class="stat-value" id="statStage">種子</div>
+                </div>
+            </div>
+
+            <div class="log-container">
+                <h3>育成ログ（最新20件）</h3>
+                <div class="log-list" id="logList">
+                    <p class="log-empty">まだログがありません</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- トースト通知 -->
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

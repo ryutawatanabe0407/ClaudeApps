@@ -17,4 +17,34 @@ db.exec(`
   )
 `);
 
+// ディッキア育成ゲーム用テーブル
+db.exec(`
+  CREATE TABLE IF NOT EXISTS dyckia_characters (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    species TEXT NOT NULL,
+    nickname TEXT,
+    planted_at TEXT NOT NULL,
+    water_level INTEGER DEFAULT 50,
+    nutrition_level INTEGER DEFAULT 50,
+    growth_stage INTEGER DEFAULT 0,
+    last_watered TEXT,
+    last_fertilized TEXT,
+    total_water_count INTEGER DEFAULT 0,
+    total_fertilize_count INTEGER DEFAULT 0,
+    created_at TEXT DEFAULT (datetime('now'))
+  )
+`);
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS dyckia_logs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    character_id INTEGER NOT NULL,
+    action_type TEXT NOT NULL,
+    before_stage INTEGER,
+    after_stage INTEGER,
+    timestamp TEXT DEFAULT (datetime('now')),
+    FOREIGN KEY (character_id) REFERENCES dyckia_characters(id)
+  )
+`);
+
 module.exports = db;

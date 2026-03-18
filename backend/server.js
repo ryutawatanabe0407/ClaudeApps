@@ -1,12 +1,16 @@
 const express = require('express');
 const cors = require('cors');
 const db = require('./db');
+const dyckiaRoutes = require('./dyckia-routes');
 
 const app = express();
 const PORT = 3001;
 
 app.use(cors());
 app.use(express.json());
+
+// ディッキア育成ゲーム用API
+app.use('/api/dyckia', dyckiaRoutes);
 
 // 全タスク取得
 app.get('/api/tasks', (req, res) => {
@@ -77,6 +81,6 @@ app.delete('/api/tasks', (req, res) => {
   res.json({ success: true });
 });
 
-app.listen(PORT, () => {
-  console.log(`Gantt Backend running at http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Gantt Backend running at http://0.0.0.0:${PORT}`);
 });

@@ -11,14 +11,73 @@ const CONFIG = {
     COMBO_MULTIPLIER: 1.5
 };
 
-// ディッキア画像のパス（複数種類）
-const DYCKIA_IMAGE_PATHS = [
-    'assets/dyckia.svg',   // 緑
-    'assets/dyckia2.svg',  // 赤
-    'assets/dyckia3.svg',  // 青
-    'assets/dyckia4.svg',  // 黄
-    'assets/dyckia5.svg'   // 紫
-];
+// 敵の種類定義
+const ENEMY_TYPES = {
+    DYCKIA_GREEN: {
+        name: 'dyckia_green',
+        image: 'assets/dyckia.svg',
+        size: 80,
+        score: 100,
+        lifetime: 2500,
+        weight: 15  // 出現確率の重み
+    },
+    DYCKIA_RED: {
+        name: 'dyckia_red',
+        image: 'assets/dyckia2.svg',
+        size: 80,
+        score: 100,
+        lifetime: 2500,
+        weight: 15
+    },
+    DYCKIA_BLUE: {
+        name: 'dyckia_blue',
+        image: 'assets/dyckia3.svg',
+        size: 80,
+        score: 100,
+        lifetime: 2500,
+        weight: 15
+    },
+    DYCKIA_YELLOW: {
+        name: 'dyckia_yellow',
+        image: 'assets/dyckia4.svg',
+        size: 80,
+        score: 100,
+        lifetime: 2500,
+        weight: 15
+    },
+    DYCKIA_PURPLE: {
+        name: 'dyckia_purple',
+        image: 'assets/dyckia5.svg',
+        size: 80,
+        score: 100,
+        lifetime: 2500,
+        weight: 15
+    },
+    SUNFLOWER: {
+        name: 'sunflower',
+        image: 'assets/sunflower.svg',
+        size: 100,  // 大きめ
+        score: 200,  // 高得点
+        lifetime: 3000,  // 長めに表示
+        weight: 10
+    },
+    CACTUS: {
+        name: 'cactus',
+        image: 'assets/cactus.svg',
+        size: 70,  // 小さめ
+        score: 150,
+        lifetime: 2000,  // 素早く消える
+        weight: 15
+    },
+    SUCCULENT: {
+        name: 'succulent',
+        image: 'assets/succulent.svg',
+        size: 85,
+        score: 120,
+        lifetime: 2500,
+        weight: 15
+    }
+};
 
 // ゲーム状態
 const GAME_STATE = {
@@ -50,15 +109,16 @@ class DyckiaFPS {
         this.targets = [];
         this.particles = [];
 
-        // ディッキア画像の読み込み（複数種類）
-        this.dyckiaImages = [];
-        DYCKIA_IMAGE_PATHS.forEach((path, index) => {
+        // 敵画像の読み込み
+        this.enemyImages = {};
+        Object.keys(ENEMY_TYPES).forEach(key => {
+            const enemyType = ENEMY_TYPES[key];
             const img = new Image();
-            img.src = path;
+            img.src = enemyType.image;
             img.onerror = () => {
-                console.error(`Failed to load dyckia image: ${path}`);
+                console.error(`Failed to load enemy image: ${enemyType.image}`);
             };
-            this.dyckiaImages.push(img);
+            this.enemyImages[enemyType.name] = img;
         });
 
         this.setupCanvas();
@@ -205,20 +265,45 @@ class DyckiaFPS {
     }
 
     spawnTarget() {
-        const margin = CONFIG.TARGET_SIZE;
+        // 重み付きランダムで敵タイプを選択
+        const enemyType = this.getRandomEnemyType();
+        const margin = enemyType.size;
+
         const target = {
             x: margin + Math.random() * (this.canvas.width - margin * 2),
             y: margin + Math.random() * (this.canvas.height - margin * 2),
-            size: CONFIG.TARGET_SIZE,
+            size: enemyType.size,
             spawnTime: Date.now(),
             scale: 0, // アニメーション用
-            imageIndex: Math.floor(Math.random() * this.dyckiaImages.length) // ランダムな画像を選択
+            enemyType: enemyType
         };
         this.targets.push(target);
     }
 
+    getRandomEnemyType() {
+        // 全ての重みの合計を計算
+        const totalWeight = Object.values(ENEMY_TYPES).reduce((sum, type) => sum + type.weight, 0);
+        let random = Math.random() * totalWeight;
+
+        // 重み付きランダム選択
+        for (const key in ENEMY_TYPES) {
+            const enemyType = ENEMY_TYPES[key];
+            random -= enemyType.weight;
+            if (random <= 0) {
+                return enemyType;
+            }
+        }
+
+        // フォールバック
+        return ENEMY_TYPES.DYCKIA_GREEN;
+    }
+
     shoot(x, y) {
         if (this.ammo <= 0) {
+            // 弾切れ時、自動リロード開始
+            if (!this.isReloading) {
+                this.reload();
+            }
             return;
         }
 
@@ -260,8 +345,8 @@ class DyckiaFPS {
             this.maxCombo = this.currentCombo;
         }
 
-        // スコア計算
-        let points = CONFIG.HIT_SCORE;
+        // スコア計算（敵タイプに応じた基礎得点）
+        let points = target.enemyType.score;
         if (this.currentCombo > 1) {
             points = Math.floor(points * (1 + (this.currentCombo - 1) * CONFIG.COMBO_MULTIPLIER));
         }
@@ -332,7 +417,7 @@ class DyckiaFPS {
         // グリッド（FPS風）
         this.drawGrid();
 
-        // ターゲット（ディッキア）を描画
+        // ターゲット（敵）を描画
         const now = Date.now();
         for (let i = this.targets.length - 1; i >= 0; i--) {
             const target = this.targets[i];
@@ -343,14 +428,14 @@ class DyckiaFPS {
                 target.scale = Math.min(1, elapsed / 200);
             }
 
-            // タイムアウトチェック
-            if (elapsed > CONFIG.TARGET_LIFETIME) {
+            // タイムアウトチェック（敵タイプのライフタイムを使用）
+            if (elapsed > target.enemyType.lifetime) {
                 this.targets.splice(i, 1);
                 continue;
             }
 
             // 点滅エフェクト（タイムアウト前）
-            const timeLeft = CONFIG.TARGET_LIFETIME - elapsed;
+            const timeLeft = target.enemyType.lifetime - elapsed;
             if (timeLeft < 500) {
                 if (Math.floor(elapsed / 100) % 2 === 0) {
                     continue; // 点滅
@@ -415,11 +500,11 @@ class DyckiaFPS {
         this.ctx.ellipse(0, 10, target.size * 0.4, target.size * 0.15, 0, 0, Math.PI * 2);
         this.ctx.fill();
 
-        // ディッキア画像（ランダムな種類）
-        const dyckiaImage = this.dyckiaImages[target.imageIndex];
-        if (dyckiaImage && dyckiaImage.complete) {
+        // 敵画像
+        const enemyImage = this.enemyImages[target.enemyType.name];
+        if (enemyImage && enemyImage.complete) {
             this.ctx.drawImage(
-                dyckiaImage,
+                enemyImage,
                 -target.size / 2,
                 -target.size / 2,
                 target.size,
@@ -438,8 +523,15 @@ class DyckiaFPS {
             this.ctx.fillText('🌵', 0, 0);
         }
 
-        // ターゲット枠（赤）
-        this.ctx.strokeStyle = '#ff0000';
+        // ターゲット枠（敵タイプに応じて色を変える）
+        let targetColor = '#ff0000';  // 通常は赤
+        if (target.enemyType.score >= 200) {
+            targetColor = '#ffd700';  // 高得点は金色
+        } else if (target.enemyType.score >= 150) {
+            targetColor = '#ff8c00';  // 中得点はオレンジ
+        }
+
+        this.ctx.strokeStyle = targetColor;
         this.ctx.lineWidth = 3;
         this.ctx.setLineDash([5, 5]);
         this.ctx.beginPath();
