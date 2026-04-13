@@ -1,0 +1,557 @@
+/* ================================================
+   キャリア戦略ダッシュボード — スタイルシート
+   ================================================ */
+
+:root {
+  --bg:          #0d1117;
+  --bg-2:        #161b22;
+  --bg-3:        #21262d;
+  --bg-4:        #30363d;
+  --border:      #30363d;
+  --border-2:    #484f58;
+  --text:        #e6edf3;
+  --text-muted:  #8b949e;
+  --text-dim:    #6e7681;
+  --accent:      #58a6ff;
+  --accent-2:    #388bfd;
+  --green:       #3fb950;
+  --yellow:      #d29922;
+  --orange:      #db6d28;
+  --red:         #f85149;
+  --purple:      #bc8cff;
+  --pink:        #ff7eb6;
+  --teal:        #39c5cf;
+
+  /* Ikigai カラー */
+  --iki-love:    rgba(255, 126, 182, 0.55);
+  --iki-good:    rgba(88, 166, 255, 0.55);
+  --iki-needs:   rgba(63, 185, 80, 0.55);
+  --iki-paid:    rgba(210, 153, 34, 0.55);
+
+  --radius:      8px;
+  --radius-lg:   12px;
+  --shadow:      0 4px 16px rgba(0,0,0,0.4);
+  --transition:  0.18s ease;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ── ヘッダー ── */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 8px rgba(0,0,0,0.5);
+}
+.header-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  height: 56px;
+}
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.brand-icon { font-size: 20px; color: var(--accent); }
+.brand-name { font-size: 15px; font-weight: 700; white-space: nowrap; }
+
+/* タブナビ */
+.tab-nav { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+.tab-nav::-webkit-scrollbar { display: none; }
+.tab-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-family: inherit;
+  padding: 6px 14px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition);
+}
+.tab-btn:hover { color: var(--text); background: var(--bg-3); }
+.tab-btn.active { color: var(--accent); background: rgba(88, 166, 255, 0.1); font-weight: 600; }
+
+/* ── メイン ── */
+.app-main { max-width: 1280px; margin: 0 auto; padding: 28px 20px 60px; }
+
+/* タブペイン */
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+
+/* セクションヘッダー */
+.section-header {
+  margin-bottom: 24px;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.section-header h2 { font-size: 22px; font-weight: 700; }
+.section-header .section-sub { color: var(--text-muted); font-size: 13px; flex: 1 1 100%; margin-top: 4px; }
+.en-label { font-size: 13px; color: var(--text-dim); font-weight: 400; font-style: italic; }
+
+/* ── ボタン ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-family: inherit;
+  font-weight: 600;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-primary  { background: var(--accent-2); color: #fff; border-color: var(--accent-2); }
+.btn-primary:hover { background: var(--accent); border-color: var(--accent); }
+.btn-ghost    { background: var(--bg-3); color: var(--text); border-color: var(--border-2); }
+.btn-ghost:hover { background: var(--bg-4); }
+.btn-danger   { background: transparent; color: var(--red); border-color: var(--red); }
+.btn-danger:hover { background: rgba(248,81,73,0.12); }
+.btn-sm { padding: 4px 10px; font-size: 12px; }
+
+/* ── ダッシュボード ── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
+  margin-bottom: 28px;
+}
+.kpi-card {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  text-align: center;
+}
+.kpi-label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+.kpi-value { font-size: 32px; font-weight: 700; color: var(--accent); }
+.kpi-value small { font-size: 16px; }
+
+.dashboard-charts {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.chart-card {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+}
+.chart-card h3 { font-size: 13px; color: var(--text-muted); margin-bottom: 14px; }
+.chart-card--wide { }
+
+.dashboard-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.activity-card {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+}
+.activity-card h3 { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+.activity-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.activity-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  padding: 6px 10px;
+  background: var(--bg-3);
+  border-radius: var(--radius);
+}
+
+/* ── Ikigai ── */
+.ikigai-layout {
+  display: grid;
+  grid-template-columns: 520px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+.ikigai-canvas-wrap canvas { display: block; max-width: 100%; }
+.ikigai-lists {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.ikigai-list-card {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+}
+.ikigai-list-card h4 { font-size: 13px; margin-bottom: 8px; }
+.ikigai-list-card ul { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.ikigai-list-card li {
+  font-size: 13px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: var(--bg-3);
+}
+.ikigai-list-card.love  { border-top: 3px solid var(--pink); }
+.ikigai-list-card.good  { border-top: 3px solid var(--accent); }
+.ikigai-list-card.needs { border-top: 3px solid var(--green); }
+.ikigai-list-card.paid  { border-top: 3px solid var(--yellow); }
+
+/* ── スキルマップ ── */
+.tshape-wrap {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 24px;
+  overflow-x: auto;
+}
+.tshape-wrap canvas { display: block; max-width: 100%; }
+
+.skills-table-wrap {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+}
+.skills-group h3 { font-size: 14px; margin-bottom: 12px; color: var(--text-muted); }
+.skill-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.skill-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.skill-item .skill-name { flex: 1; font-weight: 600; font-size: 14px; }
+.skill-item .skill-meta { font-size: 12px; color: var(--text-muted); }
+.skill-proficiency {
+  display: flex;
+  gap: 3px;
+}
+.pip {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--bg-4);
+}
+.pip.filled { background: var(--accent); }
+.pip.core { background: var(--purple); }
+.learning-badge {
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 10px;
+  background: rgba(63,185,80,0.2);
+  color: var(--green);
+  border: 1px solid rgba(63,185,80,0.4);
+}
+.skill-actions { display: flex; gap: 4px; }
+
+/* ── 目標・OKR ── */
+.goal-list { display: flex; flex-direction: column; gap: 14px; }
+.goal-card {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+}
+.goal-card.objective { border-left: 4px solid var(--accent); }
+.goal-card.key_result { border-left: 4px solid var(--green); margin-left: 24px; }
+.goal-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.goal-type-badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+.badge-obj  { background: rgba(88,166,255,0.15); color: var(--accent); }
+.badge-kr   { background: rgba(63,185,80,0.15);  color: var(--green); }
+.badge-done { background: rgba(139,148,158,0.15); color: var(--text-muted); }
+.badge-drop { background: rgba(248,81,73,0.15);  color: var(--red); }
+.goal-title { font-size: 15px; font-weight: 600; flex: 1; }
+.goal-cycle { font-size: 12px; color: var(--text-muted); }
+.goal-progress-bar {
+  background: var(--bg-4);
+  border-radius: 4px;
+  height: 8px;
+  margin: 8px 0;
+  overflow: hidden;
+}
+.goal-progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--accent-2), var(--green));
+  transition: width 0.4s ease;
+}
+.goal-progress-label { font-size: 12px; color: var(--text-muted); }
+.goal-actions { display: flex; gap: 6px; margin-top: 10px; }
+
+/* ── 学習ログ ── */
+.learning-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+.learning-chart-wrap {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  text-align: center;
+}
+.learning-chart-wrap canvas { display: block; margin: 0 auto; }
+.learn-stats { margin-top: 14px; font-size: 12px; color: var(--text-muted); line-height: 1.8; }
+
+.log-filters { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+.filter-btn {
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.filter-btn.active, .filter-btn:hover { background: var(--accent-2); color: #fff; border-color: var(--accent-2); }
+
+.learning-log-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.log-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.log-type-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot-experience { background: var(--orange); }
+.dot-mentorship { background: var(--purple); }
+.dot-formal     { background: var(--teal); }
+.log-body { flex: 1; }
+.log-title { font-size: 13px; font-weight: 600; }
+.log-meta  { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.log-hours { font-size: 13px; font-weight: 700; color: var(--accent); flex-shrink: 0; }
+
+/* ── フォーカス ── */
+.focus-layout {
+  display: grid;
+  grid-template-columns: 460px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+.matrix-wrap {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+}
+.matrix-wrap canvas { display: block; max-width: 100%; }
+.matrix-legend { margin-top: 14px; display: flex; flex-direction: column; gap: 6px; }
+.legend-item {
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: var(--radius);
+  font-weight: 500;
+}
+.legend-item.do       { background: rgba(63,185,80,0.15);  color: var(--green); }
+.legend-item.grow     { background: rgba(88,166,255,0.15); color: var(--accent); }
+.legend-item.delegate { background: rgba(210,153,34,0.15); color: var(--yellow); }
+.legend-item.stop     { background: rgba(248,81,73,0.15);  color: var(--red); }
+
+.focus-list-wrap { display: flex; flex-direction: column; gap: 14px; }
+.focus-section h3 { font-size: 13px; margin-bottom: 8px; }
+.focus-items { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.focus-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  font-size: 13px;
+  border: 1px solid var(--border);
+  background: var(--bg-2);
+}
+.focus-item-title { flex: 1; }
+.focus-item-meta  { font-size: 11px; color: var(--text-muted); }
+.do-section   .focus-item { border-left: 3px solid var(--green); }
+.grow-section .focus-item { border-left: 3px solid var(--accent); }
+.delegate-section .focus-item { border-left: 3px solid var(--yellow); }
+.stop-section .focus-item { border-left: 3px solid var(--red); }
+
+/* ── Legend共通 ── */
+.legend { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; }
+.legend-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+/* ── モーダル ── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 500;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--bg-2);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 640px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow);
+  animation: slideUp 0.2s ease;
+}
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.modal-header h3 { font-size: 16px; font-weight: 700; }
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+.modal-close:hover { background: var(--bg-3); color: var(--text); }
+.modal-body  { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--border);
+}
+.modal-hint { font-size: 12px; color: var(--text-muted); background: var(--bg-3); padding: 8px 12px; border-radius: var(--radius); }
+
+/* フォームフィールド */
+.field-group { display: flex; flex-direction: column; gap: 6px; }
+.field-group label { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+.field-group input,
+.field-group select,
+.field-group textarea {
+  background: var(--bg-3);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  padding: 8px 12px;
+  transition: border-color var(--transition);
+}
+.field-group input:focus,
+.field-group select:focus,
+.field-group textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.field-group textarea { resize: vertical; }
+.field-group--check { flex-direction: row; align-items: center; }
+.field-group--check label { display: flex; align-items: center; gap: 8px; color: var(--text); }
+.field-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; }
+.required { color: var(--red); }
+
+.ikigai-edit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.range-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+input[type="range"] {
+  accent-color: var(--accent);
+  width: 100%;
+  padding: 0;
+}
+
+.action-preview {
+  padding: 10px 14px;
+  background: var(--bg-3);
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  border: 1px solid var(--border);
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+/* ── ユーティリティ ── */
+.text-muted { color: var(--text-muted); }
+.empty-state {
+  text-align: center;
+  padding: 32px 20px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.empty-state .empty-icon { font-size: 32px; margin-bottom: 8px; }
+
+/* ── レスポンシブ ── */
+@media (max-width: 900px) {
+  .ikigai-layout      { grid-template-columns: 1fr; }
+  .skills-table-wrap  { grid-template-columns: 1fr; }
+  .dashboard-charts   { grid-template-columns: 1fr; }
+  .dashboard-bottom   { grid-template-columns: 1fr; }
+  .learning-layout    { grid-template-columns: 1fr; }
+  .focus-layout       { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .header-inner { padding: 0 12px; gap: 12px; }
+  .brand-name   { display: none; }
+  .app-main     { padding: 16px 12px 40px; }
+  .kpi-grid     { grid-template-columns: repeat(3, 1fr); }
+  .ikigai-lists { grid-template-columns: 1fr; }
+  .ikigai-edit-grid { grid-template-columns: 1fr; }
+}

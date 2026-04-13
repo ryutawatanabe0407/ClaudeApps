@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>キャリア戦略ダッシュボード</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="header-brand">
+        <span class="brand-icon">◈</span>
+        <span class="brand-name">キャリア戦略ダッシュボード</span>
+      </div>
+      <nav class="tab-nav" id="tabNav">
+        <button class="tab-btn active" data-tab="dashboard">ダッシュボード</button>
+        <button class="tab-btn" data-tab="ikigai">生きがい</button>
+        <button class="tab-btn" data-tab="skills">スキルマップ</button>
+        <button class="tab-btn" data-tab="goals">目標・OKR</button>
+        <button class="tab-btn" data-tab="learning">学習ログ</button>
+        <button class="tab-btn" data-tab="focus">フォーカス</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- メインコンテンツ -->
+  <main class="app-main">
+
+    <!-- ① ダッシュボード -->
+    <section class="tab-pane active" id="tab-dashboard">
+      <div class="section-header">
+        <h2>ダッシュボード</h2>
+        <p class="section-sub">キャリア全体のサマリー</p>
+      </div>
+      <div class="kpi-grid" id="kpiGrid">
+        <div class="kpi-card"><div class="kpi-label">登録スキル数</div><div class="kpi-value" id="kpiSkills">—</div></div>
+        <div class="kpi-card"><div class="kpi-label">コアスキル</div><div class="kpi-value" id="kpiCore">—</div></div>
+        <div class="kpi-card"><div class="kpi-label">アクティブ目標</div><div class="kpi-value" id="kpiGoals">—</div></div>
+        <div class="kpi-card"><div class="kpi-label">今月の学習時間</div><div class="kpi-value" id="kpiLearning">—<small>h</small></div></div>
+        <div class="kpi-card"><div class="kpi-label">生きがい充足度</div><div class="kpi-value" id="kpiIkigai">—</div></div>
+        <div class="kpi-card"><div class="kpi-label">キャリア経歴</div><div class="kpi-value" id="kpiExp">—</div></div>
+      </div>
+      <div class="dashboard-charts">
+        <div class="chart-card">
+          <h3>学習バランス（今月）</h3>
+          <canvas id="dashLearningChart" width="220" height="220"></canvas>
+          <div class="legend" id="dashLearningLegend"></div>
+        </div>
+        <div class="chart-card chart-card--wide">
+          <h3>スキル習熟レーダー</h3>
+          <canvas id="dashSkillRadar" width="320" height="280"></canvas>
+        </div>
+      </div>
+      <div class="dashboard-bottom">
+        <div class="activity-card">
+          <h3>最近の学習ログ</h3>
+          <ul id="recentLearning" class="activity-list"></ul>
+        </div>
+        <div class="activity-card">
+          <h3>フォーカスアクション</h3>
+          <ul id="focusSummary" class="activity-list"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ② 生きがい -->
+    <section class="tab-pane" id="tab-ikigai">
+      <div class="section-header">
+        <h2>生きがい <span class="en-label">Ikigai</span></h2>
+        <p class="section-sub">好き・得意・世界のニーズ・稼げる — 4つの交差点があなたの生きがい</p>
+        <button class="btn btn-primary" id="btnEditIkigai">編集する</button>
+      </div>
+      <div class="ikigai-layout">
+        <div class="ikigai-canvas-wrap">
+          <canvas id="ikigaiCanvas" width="500" height="500"></canvas>
+        </div>
+        <div class="ikigai-lists" id="ikigaiLists">
+          <div class="ikigai-list-card love">
+            <h4>❤️ 好きなこと</h4>
+            <ul id="listLove"></ul>
+          </div>
+          <div class="ikigai-list-card good">
+            <h4>⭐ 得意なこと</h4>
+            <ul id="listGood"></ul>
+          </div>
+          <div class="ikigai-list-card needs">
+            <h4>🌍 世界のニーズ</h4>
+            <ul id="listNeeds"></ul>
+          </div>
+          <div class="ikigai-list-card paid">
+            <h4>💴 稼げること</h4>
+            <ul id="listPaid"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ③ スキルマップ -->
+    <section class="tab-pane" id="tab-skills">
+      <div class="section-header">
+        <h2>スキルマップ <span class="en-label">T-Shaped Skills</span></h2>
+        <p class="section-sub">縦の専門性 × 横の広さ でスキルポートフォリオを可視化</p>
+        <button class="btn btn-primary" id="btnAddSkill">＋ スキル追加</button>
+      </div>
+      <div class="tshape-wrap">
+        <canvas id="tshapeCanvas" width="900" height="400"></canvas>
+      </div>
+      <div class="skills-table-wrap">
+        <div class="skills-group">
+          <h3>🎯 コアスキル（専門軸）</h3>
+          <ul class="skill-list" id="coreSkillList"></ul>
+        </div>
+        <div class="skills-group">
+          <h3>🔗 周辺スキル（横断軸）</h3>
+          <ul class="skill-list" id="adjacentSkillList"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ④ 目標・OKR -->
+    <section class="tab-pane" id="tab-goals">
+      <div class="section-header">
+        <h2>目標・OKR</h2>
+        <p class="section-sub">四半期ごとの Objective（定性）と Key Result（定量）</p>
+        <button class="btn btn-primary" id="btnAddGoal">＋ 目標を追加</button>
+      </div>
+      <div id="goalList" class="goal-list"></div>
+    </section>
+
+    <!-- ⑤ 学習ログ -->
+    <section class="tab-pane" id="tab-learning">
+      <div class="section-header">
+        <h2>学習ログ <span class="en-label">70-20-10</span></h2>
+        <p class="section-sub">経験(70%) · 他者から(20%) · 研修(10%) — 学習バランスを確認</p>
+        <button class="btn btn-primary" id="btnAddLearning">＋ ログ追加</button>
+      </div>
+      <div class="learning-layout">
+        <div class="learning-chart-wrap">
+          <canvas id="learningDonut" width="260" height="260"></canvas>
+          <div class="legend" id="learningLegend"></div>
+          <div class="learn-stats" id="learnStats"></div>
+        </div>
+        <div class="learning-log-wrap">
+          <div class="log-filters">
+            <button class="filter-btn active" data-filter="all">すべて</button>
+            <button class="filter-btn" data-filter="experience">現場経験</button>
+            <button class="filter-btn" data-filter="mentorship">他者から</button>
+            <button class="filter-btn" data-filter="formal">研修・独学</button>
+          </div>
+          <ul class="learning-log-list" id="learningLogList"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ フォーカス -->
+    <section class="tab-pane" id="tab-focus">
+      <div class="section-header">
+        <h2>フォーカス <span class="en-label">Will × Skill</span></h2>
+        <p class="section-sub">モチベーション × 習熟度でやること・やらないことを整理</p>
+        <button class="btn btn-primary" id="btnAddFocus">＋ アイテム追加</button>
+      </div>
+      <div class="focus-layout">
+        <div class="matrix-wrap">
+          <canvas id="willSkillMatrix" width="420" height="420"></canvas>
+          <div class="matrix-legend">
+            <div class="legend-item do">⭐ やる（高Will×高Skill）</div>
+            <div class="legend-item grow">📈 育てる（高Will×低Skill）</div>
+            <div class="legend-item delegate">🤝 委任（低Will×高Skill）</div>
+            <div class="legend-item stop">🚫 やめる（低Will×低Skill）</div>
+          </div>
+        </div>
+        <div class="focus-list-wrap">
+          <div class="focus-section do-section">
+            <h3>⭐ やること</h3>
+            <ul id="focusDoList" class="focus-items"></ul>
+          </div>
+          <div class="focus-section grow-section">
+            <h3>📈 育てること</h3>
+            <ul id="focusGrowList" class="focus-items"></ul>
+          </div>
+          <div class="focus-section delegate-section">
+            <h3>🤝 委任すること</h3>
+            <ul id="focusDelegateList" class="focus-items"></ul>
+          </div>
+          <div class="focus-section stop-section">
+            <h3>🚫 やめること</h3>
+            <ul id="focusStopList" class="focus-items"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── モーダル群 ── -->
+
+  <!-- Ikigai編集モーダル -->
+  <div class="modal-overlay" id="modalIkigai">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>生きがい編集</h3>
+        <button class="modal-close" data-modal="modalIkigai">✕</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-hint">各項目を改行区切りで入力してください</p>
+        <div class="ikigai-edit-grid">
+          <div class="field-group">
+            <label>❤️ 好きなこと</label>
+            <textarea id="editLove" rows="5" placeholder="例: データ分析&#10;論文執筆&#10;チームで課題解決"></textarea>
+          </div>
+          <div class="field-group">
+            <label>⭐ 得意なこと</label>
+            <textarea id="editGood" rows="5" placeholder="例: 統計モデリング&#10;プレゼン&#10;プロジェクト管理"></textarea>
+          </div>
+          <div class="field-group">
+            <label>🌍 世界のニーズ</label>
+            <textarea id="editNeeds" rows="5" placeholder="例: AI倫理&#10;創薬研究&#10;気候変動対策"></textarea>
+          </div>
+          <div class="field-group">
+            <label>💴 稼げること</label>
+            <textarea id="editPaid" rows="5" placeholder="例: 機械学習コンサル&#10;技術顧問&#10;研究開発職"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" data-modal="modalIkigai">キャンセル</button>
+        <button class="btn btn-primary" id="btnSaveIkigai">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- スキル追加/編集モーダル -->
+  <div class="modal-overlay" id="modalSkill">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="skillModalTitle">スキル追加</h3>
+        <button class="modal-close" data-modal="modalSkill">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="field-group">
+          <label>スキル名 <span class="required">*</span></label>
+          <input type="text" id="skillName" placeholder="例: 機械学習, Python, 論文執筆" />
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label>カテゴリ</label>
+            <select id="skillCategory">
+              <option value="core">コア（専門軸）</option>
+              <option value="adjacent" selected>周辺（横断軸）</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label>習熟度</label>
+            <select id="skillProficiency">
+              <option value="1">1 — 入門</option>
+              <option value="2">2 — 基礎</option>
+              <option value="3" selected>3 — 実務</option>
+              <option value="4">4 — 上級</option>
+              <option value="5">5 — エキスパート</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label>経験年数</label>
+            <input type="number" id="skillYears" min="0" step="0.5" value="0" />
+          </div>
+          <div class="field-group field-group--check">
+            <label><input type="checkbox" id="skillLearning" /> 現在学習中</label>
+          </div>
+        </div>
+        <div class="field-group">
+          <label>メモ</label>
+          <input type="text" id="skillMemo" placeholder="資格・プロジェクト名など" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" data-modal="modalSkill">キャンセル</button>
+        <button class="btn btn-primary" id="btnSaveSkill">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 目標追加/編集モーダル -->
+  <div class="modal-overlay" id="modalGoal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="goalModalTitle">目標追加</h3>
+        <button class="modal-close" data-modal="modalGoal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="field-group">
+          <label>タイトル <span class="required">*</span></label>
+          <input type="text" id="goalTitle" placeholder="例: 国際論文を1本投稿する" />
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label>種別</label>
+            <select id="goalType">
+              <option value="objective">Objective（定性目標）</option>
+              <option value="key_result">Key Result（定量指標）</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label>四半期</label>
+            <input type="text" id="goalCycle" placeholder="例: 2026-Q1" />
+          </div>
+        </div>
+        <div class="field-row" id="krFields">
+          <div class="field-group">
+            <label>現在値</label>
+            <input type="number" id="goalCurrent" value="0" step="any" />
+          </div>
+          <div class="field-group">
+            <label>目標値</label>
+            <input type="number" id="goalTarget" value="100" step="any" />
+          </div>
+          <div class="field-group">
+            <label>単位</label>
+            <input type="text" id="goalUnit" value="%" placeholder="%, 件, h ..." />
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label>期限</label>
+            <input type="date" id="goalDue" />
+          </div>
+          <div class="field-group">
+            <label>ステータス</label>
+            <select id="goalStatus">
+              <option value="active">進行中</option>
+              <option value="done">完了</option>
+              <option value="dropped">中止</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" data-modal="modalGoal">キャンセル</button>
+        <button class="btn btn-primary" id="btnSaveGoal">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 学習ログ追加モーダル -->
+  <div class="modal-overlay" id="modalLearning">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>学習ログ追加</h3>
+        <button class="modal-close" data-modal="modalLearning">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="field-group">
+          <label>タイトル <span class="required">*</span></label>
+          <input type="text" id="learnTitle" placeholder="例: Kaggleコンペ参加, メンターとの1on1" />
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label>学習種別</label>
+            <select id="learnType">
+              <option value="experience">現場経験（70%）</option>
+              <option value="mentorship">他者から（20%）</option>
+              <option value="formal">研修・独学（10%）</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label>時間（h）</label>
+            <input type="number" id="learnHours" min="0" step="0.5" value="1" />
+          </div>
+          <div class="field-group">
+            <label>日付 <span class="required">*</span></label>
+            <input type="date" id="learnDate" />
+          </div>
+        </div>
+        <div class="field-group">
+          <label>関連スキル（カンマ区切り）</label>
+          <input type="text" id="learnSkills" placeholder="例: Python, 統計, ML" />
+        </div>
+        <div class="field-group">
+          <label>メモ</label>
+          <textarea id="learnNotes" rows="3" placeholder="気づき・学び"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" data-modal="modalLearning">キャンセル</button>
+        <button class="btn btn-primary" id="btnSaveLearning">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- フォーカス追加/編集モーダル -->
+  <div class="modal-overlay" id="modalFocus">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="focusModalTitle">フォーカスアイテム追加</h3>
+        <button class="modal-close" data-modal="modalFocus">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="field-group">
+          <label>アクティビティ名 <span class="required">*</span></label>
+          <input type="text" id="focusTitle" placeholder="例: 論文レビュー, 英語学習, 定例会議" />
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label>モチベーション（Will）: <span id="willDisplay">3</span></label>
+            <input type="range" id="focusWill" min="1" max="5" value="3" />
+            <div class="range-labels"><span>低い</span><span>高い</span></div>
+          </div>
+          <div class="field-group">
+            <label>習熟度（Skill）: <span id="skillDisplay">3</span></label>
+            <input type="range" id="focusSkill" min="1" max="5" value="3" />
+            <div class="range-labels"><span>低い</span><span>高い</span></div>
+          </div>
+        </div>
+        <div class="field-group">
+          <label>アクション判定（自動計算されます）</label>
+          <div class="action-preview" id="actionPreview">—</div>
+        </div>
+        <div class="field-group">
+          <label>メモ</label>
+          <textarea id="focusNotes" rows="2" placeholder="理由・背景・代替案など"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" data-modal="modalFocus">キャンセル</button>
+        <button class="btn btn-primary" id="btnSaveFocus">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="api.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

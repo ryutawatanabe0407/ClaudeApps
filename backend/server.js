@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const db = require('./db');
 const dyckiaRoutes = require('./dyckia-routes');
+const careerRoutes = require('./career-routes');
 
 const app = express();
 const PORT = 3001;
@@ -11,6 +12,9 @@ app.use(express.json());
 
 // ディッキア育成ゲーム用API
 app.use('/api/dyckia', dyckiaRoutes);
+
+// キャリアトラッカー用API
+app.use('/api/career', careerRoutes);
 
 // 全タスク取得
 app.get('/api/tasks', (req, res) => {
